@@ -186,6 +186,10 @@ body{
     padding:30px;
 }
 
+.box-create-po:hover{
+    cursor: pointer;
+}
+
 .btn-custom:hover{
     background: orange;
 }
