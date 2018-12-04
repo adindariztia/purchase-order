@@ -306,6 +306,7 @@ function getUserProfile(){
 function showPoSummary() {
     var number = window.location.search
     contractnumber = number.substr(length-12)
+    console.log(contractnumber)
     $.ajax({
         method: 'POST',
         url: 'http://localhost:5000/getsummary',
@@ -318,58 +319,47 @@ function showPoSummary() {
         }),
         success: function(res) {
             data = JSON.parse(res)
-            var dataContract = data[0],
-            dataItem = data[1]
+            console.log(data)
+            // var dataContract = data[0],
+            // dataItem = data[1]
 
-            $('#left-information').append(`<p class="font-weight-normal" id="requesterName">${dataContract.requester_name}</p>
-            <p class="font-weight-normal" id="poDate">${dataContract.po_start_date}</p>
+            // $('#left-information').append(`<p class="font-weight-normal" id="requesterName">${dataContract.requester_name}</p>
+            // <p class="font-weight-normal" id="poDate">${dataContract.po_start_date}</p>
             
-            <p class="font-weight-normal" id="bpmSrNumber">${dataContract.bpm_sr_number}</p>
-            <p class="font-weight-normal" id="bpmContractNumber">${dataContract.bpm_contract_number}</p>
-            <p class="font-weight-normal" id="bpmPoNumber">${dataContract.bpm_po_number}</p>
-            <p class="font-weight-normal" id="currency"> DIN INI BELOM</p>
-            <p class="font-weight-normal" id="plant">${dataContract.plant}</p>`)
+            // <p class="font-weight-normal" id="bpmSrNumber">${dataContract.bpm_sr_number}</p>
+            // <p class="font-weight-normal" id="bpmContractNumber">${dataContract.bpm_contract_number}</p>
+            // <p class="font-weight-normal" id="bpmPoNumber">${dataContract.bpm_po_number}</p>
+            // <p class="font-weight-normal" id="currency"> DIN INI BELOM</p>
+            // <p class="font-weight-normal" id="plant">${dataContract.plant}</p>`)
 
-            $('#right-information2').append(`<p class="font-weight-normal" id="payrollNumber">${dataContract.payroll_number}</p>
-            <p class="font-weight-normal mb-4" id="processId">${dataContract.process_id}</p>
-            <p class="font-weight-normal" id="completionDate">${dataContract.po_completion_date}</p>
-            <p class="font-weight-normal" id="sapSrNumber">${dataContract.sap_sr_number}</p>
-            <p class="font-weight-normal" id="sapContractNumber">${dataContract.sap_contract_number}</p>
-            <p class="font-weight-normal" id="vendorName">${dataContract.vendor_name}</p>`)
+            // $('#right-information2').append(`<p class="font-weight-normal" id="payrollNumber">${dataContract.payroll_number}</p>
+            // <p class="font-weight-normal mb-4" id="processId">${dataContract.process_id}</p>
+            // <p class="font-weight-normal" id="completionDate">${dataContract.po_completion_date}</p>
+            // <p class="font-weight-normal" id="sapSrNumber">${dataContract.sap_sr_number}</p>
+            // <p class="font-weight-normal" id="sapContractNumber">${dataContract.sap_contract_number}</p>
+            // <p class="font-weight-normal" id="vendorName">${dataContract.vendor_name}</p>`)
 
-            $('#companyRepresentative').append(`<input type="text" class="form-control" id="companyRepresentative" placeholder="">${dataContract.representative}`)
+            // $('#companyRepresentative').append(`<input type="text" class="form-control" id="companyRepresentative" placeholder="${dataContract.representative}" disabled>`)
 
-            $('#companyToProvide').append(`<p class="font-weight-normal p-2">${dataContract.to_provide}</p>`)
+            // $('#companyToProvide').append(`<p class="font-weight-normal p-2">${dataContract.to_provide}</p>`)
             
-            $('#location').append(`<p class="font-weight-normal p-2">${dataContract.location}</p>`)
+            // $('#location').append(`<p class="font-weight-normal p-2">${dataContract.location}</p>`)
 
-            $('#note').append(`<p class="font-weight-normal p-2">${dataContract.note}</p>`)
+            // $('#note').append(`<p class="font-weight-normal p-2">${dataContract.note}</p>`)
 
-            $('#serviceChargeType').append(`<p class="font-weight-normal p-2">${dataContract.service_charge_type}</p>`)
+            // $('#serviceChargeType').append(`<p class="font-weight-normal p-2">${dataContract.service_charge_type}</p>`)
 
-            dataItem.forEach(data => {
-                $('table.table tbody').append(`<tr>
-                <th id="noTablePo"scope="row">1</th>
-                <td id="itemDetail">${data.item_name}</td>
-                <td id="budgetSource2">Production</td>
-                <td id="quantity2">2330</td>
-                <td id="unitPrice">1000.000</td>
-                <td id="subtotal">2330.000.000</td>
-            </tr>`)
-            })
-            // $('#right-information').append(`<p class="font-weight-normal" id="payrollNumber">00000000000</p>
-            // <p class="font-weight-normal" id="processId">N/A</p>
-            // <p class="font-weight-normal" id="completionDate">03-Apr-2019</p>
+            // dataItem.forEach(data => {
+            //     $('table.table tbody').append(`<tr>
+            //     <th id="noTablePo"scope="row">1</th>
+            //     <td id="itemDetail">${data.item_name}</td>
+            //     <td id="budgetSource2">Production</td>
+            //     <td id="quantity2">2330</td>
+            //     <td id="unitPrice">1000.000</td>
+            //     <td id="subtotal">2330.000.000</td>
+            // </tr>`)
+            // })
             
-            // <p class="font-weight-normal" id="sapSrNumber">00000000000</p>
-            // <p class="font-weight-normal" id="sapContractNumber">00000000000</p>
-            // <p class="font-weight-normal" id="vendorName">Makers Institute</p>`)
-
-            // $('#companyRepresentative').append(`<p class="font-weight-normal p-2">Medco Representative</p>`)
-            // $('#companyToProvide').append(`<p class="font-weight-normal p-2">Medco To Provide</p>`)
-            // $('#location').append(`<p class="font-weight-normal p-2">Location</p>`)
-            // $('#note').append(`<p class="font-weight-normal p-2">Note</p>`)
-            // $('#serviceChargeType').append(`<p class="font-weight-normal p-2">Service Charge Type</p>`)
         },
         error: function(err) {
             console.log(err)
@@ -464,3 +454,100 @@ function getContractByNumber(){
     })
 }
 
+function submitToSCM() {
+    var number = window.location.search
+    contractnumber = number.substr(length-12)
+
+    var comment = $('#writeComment').val()
+    console.log(contractnumber)
+    console.log(comment)
+    $.ajax({
+        method: 'POST',
+        url: 'http://localhost:5000/submitToSCM',
+        beforeSend: function(req) {
+            req.setRequestHeader("Content-Type", "application/json")
+            req.setRequestHeader("Authorization", getCookie('token'))
+        },
+        data: JSON.stringify({
+            "sap_contract_number" : contractnumber,
+            "comment" : comment
+        }),
+        success: function(res) {
+            window.location='/requestPo.html'
+        },
+        error: function(err) {
+            console.log(err)
+        }
+    })
+
+}
+
+function getTaskListSCM() {
+    records = []
+    $.ajax({
+        method: 'GET',
+        url: 'http://localhost:5000/getTaskListSCM',
+        beforeSend: function(req){
+            req.setRequestHeader("Content-Type","application/json")
+            req.setRequestHeader("Authorization", getCookie('token'))
+        },
+        success: function (res) {
+            console.log(typeof res)
+            console.log(res)
+            response = JSON.parse(res)
+            details = response.data
+
+            details.forEach(datum => {
+                console.log(datum.record_id)
+                records.push(datum.record_id)
+                
+                
+            })
+            // if (records.length === 0) {
+            //     getTaskListSCM()
+            // }
+            // console.log(records)
+            sendRecords(records)
+            
+        },
+        error: function (err) {
+            alert("error din")
+        }
+    })
+}
+
+function sendRecords(records){
+    $.ajax({
+        method: 'POST',
+        url: 'http://localhost:5000/showTaskListSCM',
+        beforeSend: function(req){
+            req.setRequestHeader("Content-Type","application/json")
+            req.setRequestHeader("Authorization", getCookie('token'))
+        },
+        data: JSON.stringify(
+            records
+        ),
+        success: function(res){
+            datuk = JSON.parse(res)
+            data = datuk.data
+            data.forEach(po => {
+                $('table.table tbody').append(`<tr>
+                <th id="noTableCreate"scope="row">1</th>
+                <td id="sapContractNumber">${po.SAP_contract_number}</td>
+                <td id="scopeOfwork">${po.scope_of_work}</td>
+                <td id="totalPrice">${po.total_price}</td>
+                <td id="poDate">${po.po_start}</td>
+                <td id="poExpireDate">${po.po_end}</td>
+                <td id="poAction"><button type="submit" class="btn btn-info btn-custom" onclick="tocontractScm('${po.SAP_contract_number}')" id="actionPo">
+                    <i class="far fa-eye"></i> Action</button></td>
+                </tr>`)
+            })
+            
+        }
+    })
+    
+}
+
+function tocontractScm(SAP_contract_number){
+    window.location = '/poSummaryScm.html?SAP_contract_number=' + SAP_contract_number
+}

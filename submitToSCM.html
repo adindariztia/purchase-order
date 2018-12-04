@@ -270,6 +270,13 @@
 
             <!-- Box Comment submit -->
             <div class="box-form-po-summary bg-white py-2">
+                <div class="bos-form-header-Info px-3">
+                    <div class="form-group" id="addComment">
+                        <label for="exampleFormControlTextarea1">Write Comment Here</label>
+                        <textarea class="form-control" id="writeComment" rows="3"></textarea>
+                        
+                    </div>
+                </div>
                 <!-- <div class="bos-form-header-Info px-3">
                     <div class="form-group">
                         <label for="exampleFormControlTextarea1">Write Comment Here</label>
@@ -283,22 +290,22 @@
                 </div> -->
 
                 <!-- Box Comment  -->
-                <div class="box-comment">
+                <!-- <div class="box-comment">
                     <div class="box-isi-comment">
                         <p class="font-weight-normal m-0 custom-name" id="userName">Riki Permana</p>
                         <p class="font-weight-normal m-0 custom-comment" id="Comment">Saya sudah membuat SAP</p>
                         <p class="font-weight-normal m-0 custom-date" id="dateComment">03-Apr-2019</p>
                     </div>
-                </div>            
+                </div>             -->
                 
             </div> 
         </div>
     </div>
 
-    <!-------- Button Revision dan Approved ---------->
+    <!-------- Button submit to scm ---------->
     <div class="box-btn-search text-right mb-3 mx-3">
         <div>
-            <button type="submit" class="btn btn-primary btn-custom mr-2" id="submitToSCM">Submit</button>
+            <button type="submit" class="btn btn-primary btn-custom mr-2" onclick="event.preventDefault(); submitToSCM()" id="submitToTheSCM">Submit</button>
             <!-- <button type="submit" class="btn btn-primary btn-custom" id="approved">Approved</button> -->
         </div>
     </div>
@@ -307,8 +314,8 @@
 <!-- <script src="main.js"></script> -->
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
 <script>
-checkSession()
-getUserProfile()
-showPoSummary()
+// checkSession()
+// getUserProfile()
+// showPoSummary()
 </script>
 </html>

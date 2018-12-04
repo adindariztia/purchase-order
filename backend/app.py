@@ -569,9 +569,12 @@ def getSummary():
     contract_number = data['sap_contract_number']
     contract_doc = Contract.query.filter_by(SAP_contract_number = contract_number).first()
     contract_id = contract_doc.id
-
     userDB = User.query.filter_by(email = email, id = contract_doc.user_id).first()
-    userRole = Roles.query.filter_by(id = userDB.position_id).first()
+    # user_login = User.query.filter_by(email=email).first()
+    # if user_login.position_id == 1:
+    # else:
+    #     userDB = User
+    # userRole = Roles.query.filter_by(id = userDB.position_id).first()
     headerDB = Header.query.filter_by(contract_id = contract_id).first()
     itemDB = Items.query.filter_by(contract_id = contract_id).all()
 
@@ -592,7 +595,7 @@ def getSummary():
     json_format = {
         "requester_name" : userDB.user_name,
         "payroll_number" : userDB.payroll_number,
-        "requester_position" : userRole.role,
+        # "requester_position" : userRole.role,
         "process_id" : contract_doc.process_id,
         "po_start_date" : contract_doc.po_start,
         "po_completion_date" : contract_doc.po_end,
@@ -767,6 +770,52 @@ def getcontractbyid():
 
     data_json = json.dumps(json_format)
     return data_json, 201
+
+
+@app.route('/getTaskListSCM')
+def getListSCM():
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
+    username = decoded['username']
+    searchToken = User.query.filter_by(user_name=username).first()
+    user_token = searchToken.token
+
+    query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=SCM Reviewer&filter[state]=active&filter[definition_id]=%s" % (os.getenv("DEFINITION_ID"))
+    url = os.getenv("BASE_URL_TASK")+"?"+quote(query, safe="&=")
+
+    r_get = requests.get(url, headers={
+        "Content-Type": "Application/json", "Authorization": "Bearer %s" % user_token
+    })
+    result = json.loads(r_get.text)
+    print(result)
+    return r_get.text, 200
+
+@app.route('/showTaskListSCM', methods=['POST'])
+def showtask():
+    contractList = {"data": []}
+    data = request.get_json()
+    for ww in data:
+        contract = Contract.query.filter_by(record_id=ww).first()
+        if contract:
+            details = {
+            "po_start" : contract.po_start,
+            "po_end" : contract.po_end,
+            "vendor_name" : contract.vendor_name,
+            "scope_of_work" : contract.scope_of_work,
+            "total_price" : contract.total_price,
+            "SAP_contract_number" : contract.SAP_contract_number,
+            "SAP_SR_number" : contract.SAP_SR_number,
+            "BPM_contract_number" : contract.BPM_contract_number,
+            "BPM_SR_number" : contract.BPM_SR_number,
+            "BPM_PO_number" : contract.BPM_PO_number,
+            "cost_center_id" : contract.cost_center_id  
+            }
+        contractList["data"].append(details)
+    
+    print(type(contractList))
+    print(contractList)
+
+    return json.dumps(contractList), 200
+
 
 
 if __name__ == '__main__':
