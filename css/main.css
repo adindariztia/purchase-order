@@ -1,0 +1,496 @@
+
+/* ------ navbar ------- */
+
+body{
+    font-family: sans-serif;
+    background: rgb(187, 186, 186);
+}
+
+.btn-custom2{
+    color:white;
+}
+
+.btn-custom2:hover{
+    color:rgb(255, 157, 0);
+    text-decoration: none;
+}
+
+.navbar-custom{
+    background: linear-gradient(to right, #000066 7%, #cc0099 100%) !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+/* ---------------- side navbar ----------------- */
+
+.nav-item{
+    list-style: none;
+}
+
+.sidenav {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    margin-top:52.38px;
+}
+
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 10px;}
+  .sidenav a {font-size: 18px;}
+}
+
+
+.sidebar-text{
+    padding-left:2rem;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.sidenav .nav-item .nav-link {
+    padding-left:2rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+  
+.sidenav .nav-item .nav-link:hover{
+    background-color: rgba(255, 255, 255, 0.75);
+    color:black;
+    cursor: pointer;
+}
+
+.active{
+    background: rgba(255, 255, 255, 0.75);
+    color:black;
+}
+
+/* ---------------- side navbar submenu ----------------- */
+
+.dropdown-menu{
+    margin:0;
+    padding:0;
+    width: 256px;
+    border-radius: 0;
+    margin-left: -10px;
+    background-color: rgba(255, 255, 255, 0.75);
+}
+
+.dropdown-item{
+    margin:0;
+    color:black;
+    padding-left:2rem;
+
+}
+
+.dropdown-item:hover{ 
+    background:#007bff;;
+    color:white;
+}
+
+/* ---------------- isi page ----------------- */
+.main {
+    margin-left: 250px; /* Same as the width of the sidenav */
+    display:grid;
+    grid-template-columns: 2fr 1fr 1fr;
+}
+
+.header {
+    margin-left: 250px; /* Same as the width of the sidenav */
+    padding-left:20px;
+}
+
+
+ /* ---------------- isi page sebelah kiri ----------------- */   
+ 
+ .box-progress{
+     border:solid 2px rgb(233, 224, 224);
+     padding:20px;
+     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+ }
+
+.text-progress{
+    padding:6px 0px 6px 0px;
+}
+
+  /* ---------------- isi page sebelah tengah ----------------- */ 
+
+
+.panel-image{
+      border:solid 1px #e9251e;
+      height:120px;
+      border-radius:5px;
+      background-color: #e9251e;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.panel-footer{
+    border:solid 1px #e9251e;
+    padding: 5px;
+    border-radius:5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.panel-image2{
+      border:solid 1px #02f57ccc;
+      height:120px;
+      border-radius:5px;
+      background-color: #02f57ccc;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.panel-footer2{
+    border:solid 1px #02f57ccc;
+    padding: 5px;
+    border-radius:5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+/* ---------------- isi page sebelah kanan ----------------- */ 
+.panel-image3{
+      border:solid 1px #0273f5cc;
+      height:120px;
+      border-radius:5px;
+      background-color: #0273f5cc;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.panel-footer3{
+    border:solid 1px #0273f5cc;
+    padding: 5px;
+    border-radius:5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.panel-image4{
+      border:solid 1px #e6e200f6;
+      height:120px;
+      border-radius:5px;
+      background-color: #e6e200f6;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.panel-footer4{
+    border:solid 1px #e6e200f6;
+    padding: 5px;
+    border-radius:5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+  /* ---------------- page create PO ----------------- */ 
+
+.box-create-po {
+    margin-left: 250px; /* Same as the width of the sidenav */
+}
+
+ /* ---------------- form create PO ----------------- */ 
+.form-create-po{
+    padding:30px;
+}
+
+.btn-custom:hover{
+    background: orange;
+}
+
+.form-inline-custom{
+    margin: auto;
+}
+
+/* ---------------- table create PO ----------------- */ 
+.box-table-po{
+    padding:10px;
+    background-color: #007bff;
+    margin:10px;
+}
+
+/* ---------------- page PO Summary ----------------- */ 
+
+.box-po-summary {
+    margin-left: 250px; /* Same as the width of the sidenav */
+    padding:10px;
+}
+
+.po-summary{
+    padding:10px;
+}
+
+/* ---------------- Box Comment ----------------- */ 
+.box-comment{
+    padding:10px;
+}
+
+.box-isi-comment{
+    border:solid 1px rgb(233, 224, 224);
+    display:grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-areas: "a a a a a a"
+                         "b b b b b b"
+                         ". . . . . c";
+    padding:10px;
+    border-radius:5px;                  
+}
+
+.custom-name{
+    grid-area:a;
+}
+
+.custom-comment{
+    grid-area:b;
+}
+
+.custom-date{
+    grid-area:c;
+    text-align:right;
+}
+
+/* ---------------- page PO On Progress ----------------- */ 
+
+/* ---------------- Checklist Item ----------------- */ 
+.checklist {
+    width: 30px;
+    height: 30px;
+    background-color: darkgreen;
+    border-radius: 50%;
+    margin: auto;
+}
+
+.checklist::after {
+    content: "\2713";
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-weight: 700;
+    color: #fff;
+    font-size: 1em;
+}
+
+.not-checklist {
+    width: 30px;
+    height: 30px;
+    background-color: red;
+    border-radius: 50%;
+    margin: auto;
+}
+
+.not-checklist::after {
+    content: "\2717";
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-weight: 700;
+    color: #fff;
+    font-size: 1em;
+}
+
+/* ---------------- page About ----------------- */ 
+
+/* ---------------- Isi About ----------------- */ 
+
+.box-create-about{
+    margin-left: 250px;
+}
+
+.box-create-about-2{
+    margin: 10px;
+    background:rgba(255, 255, 255, 0.472);
+}
+
+.intro{
+    margin: 10px;
+    padding:10px;
+    background:rgba(255, 255, 255, 0.472);
+}
+/* ---------------- page How To ----------------- */ 
+
+/* ---------------- Isi How To ----------------- */ 
+
+.box-how-to{
+    margin-left: 250px;
+}
+
+.box-how-to-2{
+
+    margin: 10px;
+    background:rgba(255, 254, 254, 0.404);
+    display:grid;
+    grid-template-columns: repeat(7,1fr);
+    grid-template-areas: "a b c l k . ."
+                         ". . d . j . ."
+                         ". . f g h . ."
+                         ". . . . i . ."
+                         ". . . . m . ."
+                         ". . . . n . ."
+                         ". . . . o . ."
+                         ". . . . p . ."
+                         ". . . . q r s"
+                         "t t t t . . ."
+                         "u u u u u u u"
+                         "v v v v v v v"
+                         "w w w w w w w"
+                         ;
+    padding:10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.mulai {
+    width: 50px;
+    height: 50px;
+    background-color: darkgreen;
+    border-radius: 50%;
+    margin: auto;
+    grid-area: a;
+}
+
+.mulai::after {
+    content: "start";
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-weight: 700;
+    color: #fff;
+    font-size: 1em;
+}
+
+.arrow{
+    grid-area: b;
+}
+
+.btn-how-custom{
+    grid-area:c;
+}
+
+.arrowBottom{
+    grid-area:d;
+}
+
+.btn-how-custom-2{
+    grid-area:f;
+}
+
+.arrow-right-1{
+    grid-area: g;
+}
+
+
+.approve {
+    width: 50px;
+    height: 50px;
+    background-color: orange;
+    margin: auto;
+    grid-area: h ;
+    transform: rotate(45deg);
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+.approve::after {
+    content: "approved?";
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-weight: 700;
+    color: #fff;
+    font-size: 10px;
+    transform: rotate(-45deg);
+
+}
+
+.arrowBottom-3{
+    grid-area:i;
+}
+
+.arrow-up-1{
+    grid-area: j;
+}
+
+.arrow-left-1{
+    grid-area: k;
+}
+
+.arrow-left-2{
+    grid-area: l;
+}
+
+.btn-how-custom-3{
+    grid-area: m;
+}
+
+.arrowBottom-4{
+    grid-area: n;
+}
+
+.btn-how-custom-4{
+    grid-area:o; 
+}
+
+.arrowBottom-5{
+    grid-area: p;
+}
+
+.btn-how-custom-5{
+    grid-area:q;
+}
+
+.arrow-right-2{
+    grid-area: r;
+}
+
+.selesai {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(231, 6, 6, 0.904);
+    border-radius: 50%;
+    margin: auto;
+    grid-area: s;
+}
+
+.selesai::after {
+    content: "end";
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-weight: 700;
+    color: #fff;
+    font-size: 1em;
+}
+
+.submitReq{
+    grid-area: t;
+}
+
+.scmRev{
+    grid-area: u;
+}
+
+.manager{
+    grid-area: v;
+}
+
+.co{
+    grid-area: w;
+}
+/* ---------------- Loading ----------------- */ 
+
+.loading
+{
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    text-align:center;
+    background-color: #fff;
+}
+
+.loading img{
+    margin-top: 10%;
+}
