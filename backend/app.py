@@ -568,13 +568,10 @@ def getSummary():
     data = request.get_json()
     contract_number = data['sap_contract_number']
     contract_doc = Contract.query.filter_by(SAP_contract_number = contract_number).first()
+    userDB = User.query.filter_by(id= contract_doc.user_id).first()
     contract_id = contract_doc.id
-    userDB = User.query.filter_by(email = email, id = contract_doc.user_id).first()
-    # user_login = User.query.filter_by(email=email).first()
-    # if user_login.position_id == 1:
-    # else:
-    #     userDB = User
-    # userRole = Roles.query.filter_by(id = userDB.position_id).first()
+    
+    userRole = Roles.query.filter_by(id = userDB.position_id).first()
     headerDB = Header.query.filter_by(contract_id = contract_id).first()
     itemDB = Items.query.filter_by(contract_id = contract_id).all()
 
