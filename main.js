@@ -341,13 +341,13 @@ function showPoSummary() {
 
             $('#companyRepresentative').append(`<input type="text" class="form-control" id="companyRepresentative" placeholder="${dataContract.representative}" disabled>`)
 
-            $('#companyToProvide').append(`<p class="font-weight-normal p-2">${dataContract.to_provide}</p>`)
+            $('#companyToProvide').append(`<input type="text" class="form-control" id="companyToProvide" placeholder="${dataContract.to_provide}" disabled>`)
             
-            $('#location').append(`<p class="font-weight-normal p-2">${dataContract.location}</p>`)
+            $('#location').append(`<input type="text" class="form-control" id="location" placeholder="${dataContract.location}" disabled>`)
 
-            $('#note').append(`<p class="font-weight-normal p-2">${dataContract.note}</p>`)
+            $('#note').append(`<input type="text" class="form-control" id="note" placeholder="${dataContract.note}" disabled>`)
 
-            $('#serviceChargeType').append(`<p class="font-weight-normal p-2">${dataContract.service_charge_type}</p>`)
+            $('#serviceChargeType').append(`<input type="text" class="form-control" id="serviceChargeType" placeholder="${dataContract.service_charge_type}" disabled>`)
 
             dataItem.forEach((data, index) => {
                 $('table.table tbody').append(`<tr>
@@ -578,4 +578,35 @@ function scmapproved(decision) {
             alert(err)
         }
     })
+}
+
+function getCostCenter() {
+    $.ajax({
+        method: 'GET',
+        url: 'http://localhost:5000/getCostCenter',
+        beforeSend: function(req){
+            $('#loading').show();
+            req.setRequestHeader("Content-Type", "application/json")
+            req.setRequestHeader("Authorization", getCookie('token'))
+        },
+        success: function(res){
+            $('#loading').hide();
+            costCenter = JSON.parse(res)
+            index = costCenter.length-1
+            
+            costCenter.forEach(data => {
+                $('table.table tbody').append(`<tr>
+                <th id="noTableCostCenter"scope="row">${costCenter.length - index}</th>
+                <td id="costCenter">${data.costcenter_name}</td>
+                <td id="description">${data.description}</td>
+                </tr>`)
+                index = index - 1
+            })
+        
+        },
+        error: function(err){
+            $('#description').text('Failed');
+            console.log(err)
+        }
+    })   
 }

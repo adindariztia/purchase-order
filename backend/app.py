@@ -10,7 +10,7 @@ import jwt
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:adinda@localhost:5432/purchase_order'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:abahaos38@localhost:5432/purchase_order'
 app.config['SECRET_KEY'] = os.urandom(24)
 CORS(app, support_credentials=True)
 db = SQLAlchemy(app)
@@ -840,6 +840,23 @@ def showtask():
     print(contractList)
 
     return json.dumps(contractList), 200
+
+@app.route('/getCostCenter')
+def getCostCenter():
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
+
+    email = decoded["email"]
+    data = User.query.filter_by(email=email).first()
+    dataCost = Costcenter.query.all()
+    
+    if dataCost:
+        costCenterDetail = {
+            "costcenter_name" : fields.String,
+            "description" : fields.String,
+
+        }
+
+        return (json.dumps(marshal(dataCost,costCenterDetail))) 
 
 
 
