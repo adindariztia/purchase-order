@@ -473,6 +473,7 @@ function submitToSCM() {
             "comment" : comment
         }),
         success: function(res) {
+            alert(res)
             alert("PO have succesfully submitted to SCM")
             window.location='/dashBoard.html'
         },
@@ -556,13 +557,13 @@ function tocontractScm(SAP_contract_number){
 function scmapproved(decision) {
     var number = window.location.search
     contractnumber = number.substr(length-12)
-    
+    console.log(decision)
     $.ajax({
         method:'POST',
         url:'http://localhost:5000/scmDecision',
         beforeSend: function (req){
             req.setRequestHeader("Content-Type","application/json")
-            req.setRequestHeader("Authorization")
+            req.setRequestHeader("Authorization", getCookie('token'))
         },
         data: JSON.stringify({
             "sap_contract_number" : contractnumber,
@@ -571,7 +572,7 @@ function scmapproved(decision) {
         }),
         success: function (res){
             alert("HORE")
-            windows.location = '/onProgress.html'
+            window.location = '/onProgress.html'
         },
         error: function(err){
             alert(err)

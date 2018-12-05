@@ -217,10 +217,10 @@
                                 <tr>
                                 <th scope="col">No</th>
                                 <th scope="col">Item Detail</th>
-                                <th scope="col">Budget Source</th>
+                                <th scope="col">Description</th>
                                 <th scope="col">Quantity</th>
-                                <th scope="col">Unit Price</th>
-                                <th scope="col">Subtotal</th>
+                                <th scope="col">Note</th>
+                                <th scope="col">Location</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -322,8 +322,8 @@
     <!-------- Button Revision dan Approved ---------->
     <div class="box-btn-search text-right mb-3 mx-3">
         <div>
-            <button type="submit" class="btn btn-primary btn-custom mr-2" onclick="scmapproved('Approved')" id="revision">Revision</button>
-            <button type="submit" class="btn btn-primary btn-custom" onclick="scmapproved('Revise')" id="approved">Approved</button>
+            <button type="submit" class="btn btn-primary btn-custom mr-2" onclick="event.preventDefault(); scmapproved('Revise')" id="revision">Revision</button>
+            <button type="submit" class="btn btn-primary btn-custom" onclick="event.preventDefault(); scmapproved('Approved')" id="approved">Approved</button>
         </div>
     </div>
 
