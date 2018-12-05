@@ -613,6 +613,7 @@ def getSummary():
 
     summary.append(json_format)
     summary.append(item_all)
+    # print(summary)
     summary_json = json.dumps(summary)
 
     return summary_json,200
@@ -806,7 +807,7 @@ def showtask():
             "BPM_PO_number" : contract.BPM_PO_number,
             "cost_center_id" : contract.cost_center_id  
             }
-        contractList["data"].append(details)
+            contractList["data"].append(details)
     
     print(type(contractList))
     print(contractList)
