@@ -186,8 +186,9 @@ body{
     padding:30px;
 }
 
-.box-create-po:hover{
+#sapContractNumber:hover{
     cursor: pointer;
+    color : orange;
 }
 
 .btn-custom:hover{
