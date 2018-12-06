@@ -197,18 +197,31 @@ def submitDataPoToDatabase():
     db.session.commit()
 
     # insert data to table header
-    toHeader = Header(
-        representative = request_data['request_data']['companyRepresentative'],
-        to_provide = request_data['request_data']['companyToProvide'],
-        location = request_data['request_data']['location'],
-        note = request_data['request_data']['note'],
-        # plant = request_data['request_data']['plant'],
-        service_charge_type = request_data['request_data']['serviceChargeType'],
-        contract_id = dataContract.id
-    )
+    queryHeader = Header.query.filter_by(contract_id=dataContract.id).first()
+    if queryHeader:
+        print("ADAKOKNIH")
+        queryHeader.representative = request_data['request_data']['companyRepresentative']
+        queryHeader.to_provide = request_data['request_data']['companyToProvide']
+        queryHeader.location = request_data['request_data']['location']
+        queryHeader.note = request_data['request_data']['note']
+        queryHeader.service_charge_type = request_data['request_data']['serviceChargeType']
 
-    db.session.add(toHeader)
-    db.session.commit()
+        db.session.commit()
+
+    else:
+        print('masuk ke else')
+        toHeader = Header(
+            representative = request_data['request_data']['companyRepresentative'],
+            to_provide = request_data['request_data']['companyToProvide'],
+            location = request_data['request_data']['location'],
+            note = request_data['request_data']['note'],
+            # plant = request_data['request_data']['plant'],
+            service_charge_type = request_data['request_data']['serviceChargeType'],
+            contract_id = dataContract.id
+        )
+
+        db.session.add(toHeader)
+        db.session.commit()
 
     # insert data to table item
     arrayData = request_data['array_item']
@@ -257,10 +270,13 @@ def submit_to_scm():
         r_get = requests.get(url, headers={
                              "Content-Type": "Application/json", "Authorization": "Bearer %s" % user_token})
         result = json.loads(r_get.text)
+        print(r_get.text)
         print("loading")
         if result['data'] is None or len(result['data']) == 0:
+            print("masuk if")
             recursive()
         else:
+            print("masuk else")
             # get scm email and task id
             SCM_email = result['data'][0]['form_data']['pVSCM']
             task_id = result['data'][0]['id']
@@ -318,8 +334,10 @@ def scm_decision():
                 print("loading")
                 
                 if result['data'] is None or len(result['data']) == 0:
+                    print("masuk if manager")
                     recursive()
                 else:
+                    print("masuk else manager")
                     # get manager email and task id
                     manager_email = result['data'][0]['form_data']['pVManager']
                     task_id = result['data'][0]['id']
@@ -340,11 +358,15 @@ def scm_decision():
                         "Content-Type": "application/json", "Authorization": "Bearer %s" % user_token})
                     result = json.loads(r_post.text)
                     print(result)
-                    return r_get.text
+                    # return r_get.text
 
         recursive()
-        submitApproval(req_username,contract_doc.id)
-        return "flow sudah sampai manager"
+        if req_decision == 'Approved':
+            submitApproval(req_username,contract_doc.id)
+            return "flow sudah sampai manager"
+        else:
+            return "Flow kembali ke Requester", 200
+        
 
 
 @app.route('/managerApproved', methods=['POST'])
@@ -460,19 +482,24 @@ def ownerApproved():
         
 
 def submitApproval(username, contract_id):
+    print(username, contract_id)
     data_db = Approval.query.filter_by(contract_id = contract_id).first()
-    dbUser = User.query.filter_by(user_name=username).first()
-    role_id = dbUser.role
+    if data_db:
+        dbUser = User.query.filter_by(user_name=username).first()
+        role_id = dbUser.position_id
 
-    if role_id == 2:
-        data_db.scm_approval = 1
-    elif role_id == 3:
-        data_db.manager_approval = 1
-    elif role_id == 4:
-        data_db.contract_owner_approval =1
+        if role_id == 2:
+            data_db.scm_approval = 1
+        elif role_id == 3:
+            data_db.manager_approval = 1
+        elif role_id == 4:
+            data_db.contract_owner_approval =1
 
-    db.commit()
-    return "approved by ",str(dbUser.user_name)
+        db.commit()
+        return "approved by ",str(dbUser.user_name)
+    else:
+        if role_id == 2:
+            toHeader 
 
 
 
@@ -614,6 +641,7 @@ def getSummary():
 
     summary.append(json_format)
     summary.append(item_all)
+    # print(summary)
     summary_json = json.dumps(summary)
 
     return summary_json,200
@@ -807,7 +835,7 @@ def showtask():
             "BPM_PO_number" : contract.BPM_PO_number,
             "cost_center_id" : contract.cost_center_id  
             }
-        contractList["data"].append(details)
+            contractList["data"].append(details)
     
     print(type(contractList))
     print(contractList)

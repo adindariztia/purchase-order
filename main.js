@@ -292,7 +292,7 @@ function getUserProfile(){
             profile = JSON.parse(res)
             
             $('#profileBox').append(`<h6 class="sidebar-text" id="namaStaff">${profile.username}</h6>
-            <h6 class="sidebar-text" id="rolePosition">${profile.position}n</h6>
+            <h6 class="sidebar-text" id="rolePosition">${profile.position}</h6>
             <h6 class="sidebar-text" id="npwp">${profile.payroll_number}</h6>`)
 
         },
@@ -329,7 +329,7 @@ function showPoSummary() {
             <p class="font-weight-normal" id="bpmSrNumber">${dataContract.bpm_sr_number}</p>
             <p class="font-weight-normal" id="bpmContractNumber">${dataContract.bpm_contract_number}</p>
             <p class="font-weight-normal" id="bpmPoNumber">${dataContract.bpm_po_number}</p>
-            <p class="font-weight-normal" id="currency"> DIN INI BELOM</p>
+            <p class="font-weight-normal" id="currency"> IDR </p>
             <p class="font-weight-normal" id="plant">${dataContract.plant}</p>`)
 
             $('#right-information2').append(`<p class="font-weight-normal" id="payrollNumber">${dataContract.payroll_number}</p>
@@ -349,14 +349,14 @@ function showPoSummary() {
 
             $('#serviceChargeType').append(`<input type="text" class="form-control" id="serviceChargeType" placeholder="${dataContract.service_charge_type}" disabled>`)
 
-            dataItem.forEach(data => {
+            dataItem.forEach((data, index) => {
                 $('table.table tbody').append(`<tr>
-                <th id="noTablePo"scope="row">1</th>
+                <th id="noTablePo"scope="row">${index+1}</th>
                 <td id="itemDetail">${data.item_name}</td>
-                <td id="budgetSource2">Production</td>
-                <td id="quantity2">2330</td>
-                <td id="unitPrice">1000.000</td>
-                <td id="subtotal">2330.000.000</td>
+                <td id="budgetSource2">${data.description}</td>
+                <td id="quantity2">${data.quantity}</td>
+                <td id="unitPrice">${data.note}</td> 
+                <td id="subtotal">${data.storage_location}</td>
             </tr>`)
             })
             
@@ -473,7 +473,9 @@ function submitToSCM() {
             "comment" : comment
         }),
         success: function(res) {
-            window.location='/requestPo.html'
+            alert(res)
+            alert("PO have succesfully submitted to SCM")
+            window.location='/dashBoard.html'
         },
         error: function(err) {
             console.log(err)
@@ -530,9 +532,9 @@ function sendRecords(records){
         success: function(res){
             datuk = JSON.parse(res)
             data = datuk.data
-            data.forEach(po => {
+            data.forEach((po, index) => {
                 $('table.table tbody').append(`<tr>
-                <th id="noTableCreate"scope="row">1</th>
+                <th id="noTableCreate"scope="row">${index + 1}</th>
                 <td id="sapContractNumber">${po.SAP_contract_number}</td>
                 <td id="scopeOfwork">${po.scope_of_work}</td>
                 <td id="totalPrice">${po.total_price}</td>
@@ -555,13 +557,13 @@ function tocontractScm(SAP_contract_number){
 function scmapproved(decision) {
     var number = window.location.search
     contractnumber = number.substr(length-12)
-    
+    console.log(decision)
     $.ajax({
         method:'POST',
         url:'http://localhost:5000/scmDecision',
         beforeSend: function (req){
             req.setRequestHeader("Content-Type","application/json")
-            req.setRequestHeader("Authorization")
+            req.setRequestHeader("Authorization", getCookie('token'))
         },
         data: JSON.stringify({
             "sap_contract_number" : contractnumber,
@@ -570,7 +572,7 @@ function scmapproved(decision) {
         }),
         success: function (res){
             alert("HORE")
-            windows.location = '/onProgress.html'
+            window.location = '/onProgress.html'
         },
         error: function(err){
             alert(err)
