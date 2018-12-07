@@ -10,7 +10,7 @@ import jwt
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:abahaos38@localhost:5432/purchase_order'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:adinda@localhost:5432/purchase_order'
 app.config['SECRET_KEY'] = os.urandom(24)
 CORS(app, support_credentials=True)
 db = SQLAlchemy(app)
@@ -481,12 +481,13 @@ def ownerApproved():
         return "Release PO"
         
 
-def submitApproval(username, contract_id):
-    print(username, contract_id)
-    data_db = Approval.query.filter_by(contract_id = contract_id).first()
+def submitApproval(username, contractId):
+    print(username, contractId)
+    dbUser = User.query.filter_by(user_name=username).first()
+    role_id = dbUser.position_id
+    data_db = Approval.query.filter_by(contract_id = contractId).first()
+
     if data_db:
-        dbUser = User.query.filter_by(user_name=username).first()
-        role_id = dbUser.position_id
 
         if role_id == 2:
             data_db.scm_approval = 1
@@ -495,11 +496,31 @@ def submitApproval(username, contract_id):
         elif role_id == 4:
             data_db.contract_owner_approval =1
 
-        db.commit()
+        db.session.commit()
         return "approved by ",str(dbUser.user_name)
     else:
         if role_id == 2:
-            toHeader 
+            toApproval = Approval(
+                contract_id = contractId,
+                scm_approval = 1
+            )
+            db.session.commit()
+            return "Approved by SCM", 200
+        elif role.id == 3:
+            toApproval = Approval(
+                contract_id = contractId,
+                manager_approval = 1
+            )
+            db.session.commit()
+            return "Approved by Manager", 200
+        elif role.id == 4:
+            toApproval = Approval(
+                contract_id = contractId,
+                contract_owner_approval = 1
+            )
+            db.session.commit()
+            return "Approved by Contract Owner"
+
 
 
 
@@ -796,15 +817,24 @@ def getcontractbyid():
     data_json = json.dumps(json_format)
     return data_json, 201
 
-
-@app.route('/getTaskListSCM')
-def getListSCM():
+#getTaskList setiap state di nextflow berdasarkan yg login
+@app.route('/getTaskList')
+def getList():
     decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
     username = decoded['username']
     searchToken = User.query.filter_by(user_name=username).first()
+    userRole = searchToken.position_id
     user_token = searchToken.token
 
-    query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=SCM Reviewer&filter[state]=active&filter[definition_id]=%s" % (os.getenv("DEFINITION_ID"))
+    if userRole == 1:
+        query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=Requester&filter[state]=active&filter[definition_id]=%s" % (os.getenv("DEFINITION_ID"))
+    elif userRole == 2:
+        query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=SCM Reviewer&filter[state]=active&filter[definition_id]=%s" % (os.getenv("DEFINITION_ID"))
+    elif userRole == 3:
+        query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=Manager Approval&filter[state]=active&filter[definition_id]=%s" % (os.getenv("DEFINITION_ID"))
+    elif userRole ==4:
+        query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=Contract Owner Approval&filter[state]=active&filter[definition_id]=%s" % (os.getenv("DEFINITION_ID"))
+    
     url = os.getenv("BASE_URL_TASK")+"?"+quote(query, safe="&=")
 
     r_get = requests.get(url, headers={
@@ -818,8 +848,8 @@ def getListSCM():
 def showtask():
     contractList = {"data": []}
     data = request.get_json()
-    for ww in data:
-        contract = Contract.query.filter_by(record_id=ww).first()
+    for recordId in data:
+        contract = Contract.query.filter_by(record_id=recordId).first()
         if contract:
             details = {
             "po_start" : contract.po_start,

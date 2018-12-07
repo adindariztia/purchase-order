@@ -488,19 +488,19 @@ function getTaskListSCM() {
     records = []
     $.ajax({
         method: 'GET',
-        url: 'http://localhost:5000/getTaskListSCM',
+        url: 'http://localhost:5000/getTaskList',
         beforeSend: function(req){
             req.setRequestHeader("Content-Type","application/json")
             req.setRequestHeader("Authorization", getCookie('token'))
         },
         success: function (res) {
-            console.log(typeof res)
-            console.log(res)
+            // console.log(typeof res)
+            // console.log(res)
             response = JSON.parse(res)
             details = response.data
 
             details.forEach(datum => {
-                console.log(datum.record_id)
+                // console.log(datum.record_id)
                 records.push(datum.record_id)
                 
                 
@@ -530,8 +530,8 @@ function sendRecords(records){
             records
         ),
         success: function(res){
-            datuk = JSON.parse(res)
-            data = datuk.data
+            responseData = JSON.parse(res)
+            data = responseData.data
             data.forEach((po, index) => {
                 $('table.table tbody').append(`<tr>
                 <th id="noTableCreate"scope="row">${index + 1}</th>
@@ -592,11 +592,10 @@ function getCostCenter() {
         success: function(res){
             $('#loading').hide();
             costCenter = JSON.parse(res)
-            index = costCenter.length-1
             
-            costCenter.forEach(data => {
+            costCenter.forEach((data,index) => {
                 $('table.table tbody').append(`<tr>
-                <th id="noTableCostCenter"scope="row">${costCenter.length - index}</th>
+                <th id="noTableCostCenter"scope="row">${index}</th>
                 <td id="costCenter">${data.costcenter_name}</td>
                 <td id="description">${data.description}</td>
                 </tr>`)
@@ -609,4 +608,32 @@ function getCostCenter() {
             console.log(err)
         }
     })   
+}
+
+function getTaskList(){
+    $.ajax({
+        method: 'GET',
+        url: 'http://localhost:5000/getTaskList',
+        beforeSend: function(req) {
+            req.setRequestHeader("Content-Type","application/json")
+            req.setRequestHeader("Authorization", getCookie('token'))
+        },
+        success: function(res){
+            // alert(res)
+            response = JSON.parse(res)
+            details = response.data
+
+            details.forEach(datum => {
+                // console.log(datum.record_id)
+                // records.push(datum.record_id)
+                console.log(datum.name)
+                
+                
+            })
+        },
+        error: function(err){
+            alert(err)
+            
+        }
+    })
 }
