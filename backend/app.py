@@ -547,6 +547,7 @@ def login():
 #    bikin token jwt
             encoded = jwt.encode(payload, jwtSecretKey, algorithm='HS256')
             return encoded, 201
+            
         else:
             return "user does not exist",405
     else:
@@ -825,6 +826,7 @@ def getList():
     searchToken = User.query.filter_by(user_name=username).first()
     userRole = searchToken.position_id
     user_token = searchToken.token
+    print(user_token)
 
     if userRole == 1:
         query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=Requester&filter[state]=active&filter[definition_id]=%s" % (os.getenv("DEFINITION_ID"))
@@ -841,7 +843,6 @@ def getList():
         "Content-Type": "Application/json", "Authorization": "Bearer %s" % user_token
     })
     result = json.loads(r_get.text)
-    print(result)
     return r_get.text, 200
 
 @app.route('/showTaskListSCM', methods=['POST'])
@@ -887,6 +888,23 @@ def getCostCenter():
         }
 
         return (json.dumps(marshal(dataCost,costCenterDetail))) 
+
+
+@app.route('/getTotalPo')
+def getTotalPo():
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
+
+    email = decoded["email"]
+    data = User.query.filter_by(email=email).first()
+    dataPo = Contract.query.all()
+    
+    if dataPo:
+        ContractPo = {
+            "SAP_contract_number" : fields.String,
+        }
+        print(ContractPo)
+        return (json.dumps(marshal(dataPo,ContractPo))) 
 
 
 

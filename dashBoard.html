@@ -95,12 +95,12 @@
 
                 <h5 class="text-progress">Total PO</h5>
                 <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="progressBar1" style="width:70%">70%</div>
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="pb-po">0%</div>
                 </div>
 
                 <h5 class="text-progress">Approved By SCM</h5>
                 <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="progressBar2" style="width:70%">70%</div>
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="pb-approved">0%</div>
                 </div>
                 
                 <h5 class="text-progress">Approved By Manager</h5>
@@ -209,6 +209,7 @@
 <script>
 checkSession()
 getUserProfile()
+getCountProgress()
 </script>
 
 </html>

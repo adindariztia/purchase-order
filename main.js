@@ -610,6 +610,7 @@ function getCostCenter() {
     })   
 }
 
+<<<<<<< HEAD
 function getTaskList(){
     $.ajax({
         method: 'GET',
@@ -635,5 +636,33 @@ function getTaskList(){
             alert(err)
             
         }
+=======
+function getCountProgress(){
+    $.ajax({
+        method: 'GET',
+        url: 'https://mosaic-engine.dev.nextflow.tech/makers/api/tasks?folder=app%3Atask%3Aall&filter%5Bstate%5D=active&filter%5Bname%5D=SCM%20Reviewer&filter%5Bdefinition_id%5D%5Bname%5D=definitions%3Abpmn%3A93a40568-77cc-4471-a34b-5246786fead7',
+        beforeSend: function(req){
+            req.setRequestHeader("Content-Type", "application/json")
+            req.setRequestHeader("Authorization", 'Bearer 6_T8ry-OW4_QJwCyxrr6WY6nodfQ-xcyPnkYpBFJ2v0.12EozUYAE2kvalghQRERy0Jl8lR-_vZN78va_vNBbbg')
+        },
+        complete: function(msg){
+            console.log(msg)
+            res = msg.responseJSON
+            count = res['data']['length']
+
+            progPO = 100-parseInt((count/3)*100);
+            progApproved = parseInt((count/3)*100);
+
+            $('#pb-po').css('width',progPO+'%');
+            $('#pb-po').text(progPO+'%');
+            $('#pb-approved').css('width',progApproved+'%');
+            $('#pb-approved').text(progApproved+'%');
+
+        },
+        error: function(error){
+            alert(error)
+        }
+        
+>>>>>>> 6eb92bb1d42f75849696bb768e58c096bbb485ca
     })
 }
