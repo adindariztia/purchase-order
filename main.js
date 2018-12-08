@@ -521,7 +521,7 @@ function getTaskListSCM() {
 function sendRecords(records){
     $.ajax({
         method: 'POST',
-        url: 'http://localhost:5000/showTaskListSCM',
+        url: 'http://localhost:5000/showTaskList',
         beforeSend: function(req){
             req.setRequestHeader("Content-Type","application/json")
             req.setRequestHeader("Authorization", getCookie('token'))
@@ -545,6 +545,9 @@ function sendRecords(records){
                 </tr>`)
             })
             
+        },
+        error: function(err){
+            alert(err)
         }
     })
     
@@ -610,8 +613,9 @@ function getCostCenter() {
     })   
 }
 
-<<<<<<< HEAD
 function getTaskList(){
+    records = []
+    var tasklistOwner = '';
     $.ajax({
         method: 'GET',
         url: 'http://localhost:5000/getTaskList',
@@ -625,18 +629,141 @@ function getTaskList(){
             details = response.data
 
             details.forEach(datum => {
-                // console.log(datum.record_id)
-                // records.push(datum.record_id)
-                console.log(datum.name)
+                tasklistOwner = datum.name
                 
+                records.push(datum.record_id)
+
                 
             })
+            // console.log(tasklistOwner)
+            // console.log(records)
+            showTaskList(tasklistOwner, records)
         },
         error: function(err){
             alert(err)
             
         }
-=======
+    })
+}
+
+function showTaskList(tasklistOwner, records){
+    $.ajax({
+        method: 'POST',
+        url:'http://localhost:5000/showTaskList',
+        beforeSend: function(req){
+            req.setRequestHeader("Content-Type", "application/json")
+            req.setRequestHeader("Authorization", getCookie('token'))
+        },
+        data: JSON.stringify(
+            records
+        ),
+        success: function(res) {
+            response = JSON.parse(res)
+            data = response.data
+
+            // alert(res)
+            
+            if (tasklistOwner === 'Manager Approval'){
+                
+                data.forEach((datum, index) => {
+                //    console.log("hey tayo")
+                   $('table.table tbody').append(`<tr>
+                   <th id="noTableOnProgress"scope="row">${index+1}</th>
+                   <td class="" id="sapContractNumber">${datum.SAP_contract_number}</td>
+                   <td class="" id="nameRequester">${datum.po_start}</td>
+                   <td class="" id="vendorName">${datum.vendor_name}</td>
+                   <td class="" id="scmChecklist">
+                       <div class="checklist checklist--approved"></div>
+                   </td>
+                   <td class="" id="managerChecklist">
+                       <div class="not-checklist"></div>
+                   </td>
+                   <td class="" id="contractOwnerChecklist">
+                       <div class="not-checklist"></div>
+                   </td>
+                   <td class="" id="action">
+                       <div class="viewActionButton">
+                           <button type="submit" class="btn btn-primary mb-2 btn-custom" onclick="event.preventDefault();" id="viewActionButton">View</button>
+                       </div>
+                   </td>
+                   </tr>`)
+
+               })
+               
+            } else if (tasklistOwner === 'Requester'){
+                $('table.table tbody').append(`<tr>
+                   <th id="noTableOnProgress"scope="row">${index+1}</th>
+                   <td class="" id="sapContractNumber">${datum.SAP_contract_number}</td>
+                   <td class="" id="nameRequester">${datum.po_start}</td>
+                   <td class="" id="vendorName">${datum.vendor_name}</td>
+                   <td class="" id="scmChecklist">
+                       <div class="not-checklist"></div>
+                   </td>
+                   <td class="" id="managerChecklist">
+                       <div class="not-checklist"></div>
+                   </td>
+                   <td class="" id="contractOwnerChecklist">
+                       <div class="not-checklist"></div>
+                   </td>
+                   <td class="" id="action">
+                       <div class="viewActionButton">
+                           <button type="submit" class="btn btn-primary mb-2 btn-custom" onclick="event.preventDefault();" id="viewActionButton">View</button>
+                       </div>
+                   </td>
+                   </tr>`)
+
+            } else if (tasklistOwner === 'SCM Reviewer'){
+                $('table.table tbody').append(`<tr>
+                   <th id="noTableOnProgress"scope="row">${index+1}</th>
+                   <td class="" id="sapContractNumber">${datum.SAP_contract_number}</td>
+                   <td class="" id="nameRequester">${datum.po_start}</td>
+                   <td class="" id="vendorName">${datum.vendor_name}</td>
+                   <td class="" id="scmChecklist">
+                       <div class="not-checklist"></div>
+                   </td>
+                   <td class="" id="managerChecklist">
+                       <div class="not-checklist"></div>
+                   </td>
+                   <td class="" id="contractOwnerChecklist">
+                       <div class="not-checklist"></div>
+                   </td>
+                   <td class="" id="action">
+                       <div class="viewActionButton">
+                           <button type="submit" class="btn btn-primary mb-2 btn-custom" onclick="event.preventDefault();" id="viewActionButton">View</button>
+                       </div>
+                   </td>
+                   </tr>`)
+
+            } else if (tasklistOwner === 'Contract Owner Approval'){
+                $('table.table tbody').append(`<tr>
+                   <th id="noTableOnProgress"scope="row">${index+1}</th>
+                   <td class="" id="sapContractNumber">${datum.SAP_contract_number}</td>
+                   <td class="" id="nameRequester">${datum.po_start}</td>
+                   <td class="" id="vendorName">${datum.vendor_name}</td>
+                   <td class="" id="scmChecklist">
+                       <div class="checklist checklist--approved"></div>
+                   </td>
+                   <td class="" id="managerChecklist">
+                       <div class="checklist checklist--approved"></div>
+                   </td>
+                   <td class="" id="contractOwnerChecklist">
+                       <div class="not-checklist"></div>
+                   </td>
+                   <td class="" id="action">
+                       <div class="viewActionButton">
+                           <button type="submit" class="btn btn-primary mb-2 btn-custom" onclick="event.preventDefault();" id="viewActionButton">View</button>
+                       </div>
+                   </td>
+                   </tr>`)
+
+            }
+        },
+        error: function(err){
+            alert(err)
+        }
+    })
+}
+
 function getCountProgress(){
     $.ajax({
         method: 'GET',
@@ -663,6 +790,5 @@ function getCountProgress(){
             alert(error)
         }
         
->>>>>>> 6eb92bb1d42f75849696bb768e58c096bbb485ca
     })
 }
