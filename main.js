@@ -691,7 +691,8 @@ function showTaskList(tasklistOwner, records){
                })
                
             } else if (tasklistOwner === 'Requester'){
-                $('table.table tbody').append(`<tr>
+                data.forEach((datum, index) => {
+                    $('table.table tbody').append(`<tr>
                    <th id="noTableOnProgress"scope="row">${index+1}</th>
                    <td class="" id="sapContractNumber">${datum.SAP_contract_number}</td>
                    <td class="" id="nameRequester">${datum.po_start}</td>
@@ -711,9 +712,11 @@ function showTaskList(tasklistOwner, records){
                        </div>
                    </td>
                    </tr>`)
+                })
 
             } else if (tasklistOwner === 'SCM Reviewer'){
-                $('table.table tbody').append(`<tr>
+                data.forEach((datum, index) => {
+                    $('table.table tbody').append(`<tr>
                    <th id="noTableOnProgress"scope="row">${index+1}</th>
                    <td class="" id="sapContractNumber">${datum.SAP_contract_number}</td>
                    <td class="" id="nameRequester">${datum.po_start}</td>
@@ -733,9 +736,11 @@ function showTaskList(tasklistOwner, records){
                        </div>
                    </td>
                    </tr>`)
+                })
 
             } else if (tasklistOwner === 'Contract Owner Approval'){
-                $('table.table tbody').append(`<tr>
+                data.forEach((datum, index) => {
+                    $('table.table tbody').append(`<tr>
                    <th id="noTableOnProgress"scope="row">${index+1}</th>
                    <td class="" id="sapContractNumber">${datum.SAP_contract_number}</td>
                    <td class="" id="nameRequester">${datum.po_start}</td>
@@ -755,6 +760,7 @@ function showTaskList(tasklistOwner, records){
                        </div>
                    </td>
                    </tr>`)
+                })
 
             }
         },
