@@ -845,7 +845,7 @@ def getList():
     result = json.loads(r_get.text)
     return r_get.text, 200
 
-@app.route('/showTaskListSCM', methods=['POST'])
+@app.route('/showTaskList', methods=['POST'])
 def showtask():
     contractList = {"data": []}
     data = request.get_json()
