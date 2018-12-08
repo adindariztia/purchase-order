@@ -504,20 +504,23 @@ def submitApproval(username, contractId):
                 contract_id = contractId,
                 scm_approval = 1
             )
+            db.session.add(toApproval)
             db.session.commit()
             return "Approved by SCM", 200
-        elif role.id == 3:
+        elif role_id == 3:
             toApproval = Approval(
                 contract_id = contractId,
                 manager_approval = 1
             )
+            db.session.add(toApproval)
             db.session.commit()
             return "Approved by Manager", 200
-        elif role.id == 4:
+        elif role_id == 4:
             toApproval = Approval(
                 contract_id = contractId,
                 contract_owner_approval = 1
             )
+            db.session.add(toApproval)
             db.session.commit()
             return "Approved by Contract Owner"
 
