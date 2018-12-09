@@ -12,11 +12,6 @@
     <link rel="stylesheet" type="text/css" media="screen" href="./css/main.css" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-	<script src="main.js"></script>
-    
 </head>
 <body>
 
@@ -32,7 +27,7 @@
     </nav>
 
     </div>
-    <!---------- sidebar ------------>
+    <!-- sidebar -->
     <div class="sidenav">
 
         
@@ -82,9 +77,9 @@
 
     </div>
     
-    <!---------------------- Isi PO Summary SCM  ----------------------->
+    <!-- Isi PO Summary SCM  -->
 
-    <!--------------------------- Navbar PO Summary SCM ----------------->
+    <!-- Navbar PO Summary SCM -->
     <div class="box-po-summary">
         <div class="po-summary">
             <nav class="navbar bg-primary text-white">
@@ -143,7 +138,7 @@
         </div>
     </div>
 
-    <!--------------------------- Navbar Header Information PO SCM ----------------->
+    <!-- Navbar Header Information PO SCM -->
     <div class="box-po-summary">
         <div class="po-summary">
             <nav class="navbar bg-primary text-white">
@@ -196,7 +191,7 @@
         </div>
     </div>
 
-    <!--------------------------- Navbar Item PO SCM ----------------->
+    <!-- Navbar Item PO SCM -->
     <div class="box-po-summary">
         <div class="po-summary">
             <nav class="navbar bg-primary text-white">
@@ -207,7 +202,7 @@
             <div class="box-form-po-summary bg-white py-2">
                 <div class="bos-form-header-Info px-3">
                     <form>
-                    <!------------------ table Add PO Item  ---------------->
+                    <!-- table Add PO Item  -->
                     <div class="box-table-po">
                         <table class="table table-bordered text-center bg-white">
                             <thead>
@@ -249,7 +244,7 @@
                         </table>
                     </div>
 
-                    <!-------- Total Amount---------->
+                    <!-- Total Amount -->
                     <div class="form-group row px-4">
                         <label for="colFormLabelLg" class="col-sm-0 col-form-label">Total Amount (IDR)</label>
                         <div class="col-sm-2">
@@ -261,7 +256,7 @@
         </div>
     </div>
 
-    <!--------------------------- Navbar Comment ----------------->
+    <!-- Navbar Comment -->
     <div class="box-po-summary">
         <div class="po-summary">
             <nav class="navbar bg-primary text-white">
@@ -302,7 +297,7 @@
         </div>
     </div>
 
-    <!-------- Button submit to scm ---------->
+    <!-- Button submit to scm -->
     <div class="box-btn-search text-right mb-3 mx-3">
         <div>
             <button type="submit" class="btn btn-primary btn-custom mr-2" onclick="event.preventDefault(); submitToSCM()" id="submitToTheSCM">Submit</button>
@@ -310,12 +305,17 @@
         </div>
     </div>
 
+    <!-- <script src="main.js"></script> -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="main.js"></script>
+
+    <script>
+    checkSession()
+    getUserProfile()
+    showPoSummary()
+    </script>
 </body>
-<!-- <script src="main.js"></script> -->
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-<script>
-checkSession()
-getUserProfile()
-showPoSummary()
-</script>
 </html>

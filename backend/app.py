@@ -802,11 +802,25 @@ def getcontractbyid():
 def getListSCM():
     decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
     username = decoded['username']
+    # print(username)
     searchToken = User.query.filter_by(user_name=username).first()
     user_token = searchToken.token
-    print(user_token)
 
-    query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=SCM Reviewer&filter[state]=active&filter[definition_id]=%s" % (os.getenv("DEFINITION_ID"))
+    userRole = Roles.query.filter_by(id = searchToken.position_id).first()
+    # print(userRole.role)
+
+    
+    if (userRole.role == "Requester"):
+        position="Requester"
+    elif (userRole.role == "SCM"):
+        position="SCM Reviewer"
+    elif (userRole.role == "Manager"):
+        position="Manager Approval"
+    elif (userRole.role == "Contract Owner"):
+        position="Contract Owner Approval"
+        # print(position)
+
+    query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=%s&filter[state]=active&filter[definition_id]=%s" % (position,os.getenv("DEFINITION_ID"))
     url = os.getenv("BASE_URL_TASK")+"?"+quote(query, safe="&=")
 
     r_get = requests.get(url, headers={

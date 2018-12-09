@@ -13,12 +13,6 @@
     <link rel="stylesheet" type="text/css" media="screen" href="./css/main.css" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-    <script src="main.js"></script>
-
 </head>
 
 <body>
@@ -32,7 +26,7 @@
         </form>
     </nav>
     
-    <!---------- sidebar ------------>
+    <!-- sidebar -->
     <div class="sidenav">
         
         <div class="sidebar-text-box my-5" id="profileBox">
@@ -80,43 +74,43 @@
         
     </div>
 
-    <!----------- isi page  ----------->
+    <!-- page fill  -->
     <div class="header">
         <h1 class="my-5">DASHBOARD</h1>
     </div>
     
     <div class="main">
-        <!-- ---------- isi bagian kiri------ -->
+        <!-- left page fill -->
         <div class="left-side-page container">
-            <!--------  Progress Bar  ------->
+
+            <!-- progress bar -->
             <div class="box-progress bg-white">
 
                 <h4 class="text-center border-bottom ">PROGRESS PO</h4>
 
                 <h5 class="text-progress">Total PO</h5>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="pb-po">0%</div>
-                </div>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="pb-po">0%</div>
+                    </div>
 
                 <h5 class="text-progress">Approved By SCM</h5>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="pb-approved">0%</div>
-                </div>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="pb-approved">0%</div>
+                    </div>
                 
                 <h5 class="text-progress">Approved By Manager</h5>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="progressBar3" style="width:10%">70%</div>
-                </div>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="progressBar3" style="width:10%">70%</div>
+                    </div>
                 
                 <h5 class="text-progress">Approved By Contract Owner</h5>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="progressBar4" style="width:70%">70%</div>
-                </div>
-                
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="progressBar4" style="width:70%">70%</div>
+                    </div>
             </div>
         </div>
 
-        <!-- ---------- isi bagian tengah------ -->
+       <!-- center page fill -->
         <div class="center-side-page container">
             <div class="panel-image">
                 <div class="row my-2">
@@ -157,7 +151,7 @@
 
         </div>
 
-        <!-- ---------- isi bagian kanan------ -->
+        <!-- right page fill -->
         <div class="right-side-page container">
             <div class="panel-image3">
                 <div class="row my-2">
@@ -198,18 +192,26 @@
             </div>
         </div>
     </div>
+
     <div class="loading" id="loading">
         <img class="" src="gambar/Infinity-1.8s-200px.gif" alt="loading.." >
         <div class="description" >
             <p id="description">Loading...</p>
         </div>
     </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script>
+    checkSession()
+    getUserProfile()
+    getCountProgress()
+    </script>
+    
 </body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script>
-checkSession()
-getUserProfile()
-getCountProgress()
-</script>
+    
 
 </html>
