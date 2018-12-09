@@ -802,6 +802,23 @@ def getcontractbyid():
 def getListSCM():
     decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
     username = decoded['username']
+    searchToken = User.query.filter_by(user_name=username).first()
+    user_token = searchToken.token
+    print(user_token)
+
+    query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=SCM Reviewer&filter[state]=active&filter[definition_id]=%s" % (os.getenv("DEFINITION_ID"))
+    url = os.getenv("BASE_URL_TASK")+"?"+quote(query, safe="&=")
+
+    r_get = requests.get(url, headers={
+        "Content-Type": "Application/json", "Authorization": "Bearer %s" % user_token
+    })
+    result = json.loads(r_get.text)
+    return r_get.text, 200
+
+@app.route('/getProgressBar')
+def getProgressBar():
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
+    username = decoded['username']
     # print(username)
     searchToken = User.query.filter_by(user_name=username).first()
     user_token = searchToken.token
@@ -872,24 +889,6 @@ def getCostCenter():
         }
 
         return (json.dumps(marshal(dataCost,costCenterDetail))) 
-
-
-@app.route('/getTotalPo')
-def getTotalPo():
-    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
-    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
-
-    email = decoded["email"]
-    data = User.query.filter_by(email=email).first()
-    dataPo = Contract.query.all()
-    
-    if dataPo:
-        ContractPo = {
-            "SAP_contract_number" : fields.String,
-        }
-        print(ContractPo)
-        return (json.dumps(marshal(dataPo,ContractPo))) 
-
 
 
 if __name__ == '__main__':

@@ -55,6 +55,7 @@ function login(){
         },
         error: function(err) {
             console.log(err)
+            alert("email or password incorrect")
             $('#description').text('Failed');
             window.location = "/index.html"
         }
@@ -614,7 +615,7 @@ function getCostCenter() {
 function getCountProgress(){
     $.ajax({
         method: 'GET',
-        url: 'http://localhost:5000/getTaskListSCM',
+        url: 'http://localhost:5000/getProgressBar',
         beforeSend: function(req){
             // req.setRequestHeader("Content-Type", "application/json")
             req.setRequestHeader("Authorization",  getCookie('token'))
