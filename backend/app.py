@@ -674,22 +674,21 @@ def getSummary():
 @app.route('/completedPOList')
 def completed_po():
     decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
-    email = decoded["email"]
+    # email = decoded["email"]
     approvalDB = Approval.query.all()
     completed_po = []
 
     for approval in approvalDB:
-        if (approval.scm_approval + approval.manager_approval + approval.contract_owner_approval == 3):
-            userDB = User.query.filter_by(id = approval.user_id, email = email).first()
+        if ((approval.scm_approval == 1) and (approval.manager_approval == 1) and (approval.contract_owner_approval == 1)):
+            # userDB = User.query.filter_by(id = approval.user_id, email = email).first()
             contractDB = Contract.query.filter_by(id = approval.contract_id).first()
 
             format_json = {
-                "scm approval" : approval.scm_approval,
-                "manager approval" : approval.manager_approval,
-                "contract owner approval" : approval.contract_owner_approval,
-                "requester name" : userDB.user_name,
-                "sap conntract number" : contractDB.SAP_contract_number,
-                "vendor name" : contractDB.vendor_name
+                "scm_approval" : approval.scm_approval,
+                "manager_approval" : approval.manager_approval,
+                "contract_owner_approval" : approval.contract_owner_approval,
+                "sap_contract_number" : contractDB.SAP_contract_number,
+                "vendor_name" : contractDB.vendor_name
             }
 
             completed_po.append(format_json)
@@ -896,7 +895,7 @@ def getCostCenter():
 @app.route('/getTotalPo')
 def getTotalPo():
     decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
-    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
+    # decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
 
     email = decoded["email"]
     data = User.query.filter_by(email=email).first()
@@ -907,7 +906,8 @@ def getTotalPo():
             "SAP_contract_number" : fields.String,
         }
         print(ContractPo)
-        return (json.dumps(marshal(dataPo,ContractPo))) 
+        return (json.dumps(marshal(dataPo,ContractPo)))
+
 
 
 
