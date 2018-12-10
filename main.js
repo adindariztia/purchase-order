@@ -253,8 +253,6 @@ function addItemToTabel() {
             <i class="fas fa-fw fa-trash-alt"></i> Delete</button>
     </td>
 
-
-
     </tr>`)
     document.getElementById("theItem").reset()
     sum = 0
@@ -279,6 +277,7 @@ function addItemToTabel() {
 
 function deleterow(id) {
     $('#deleteThisRow'+id).remove();
+
 }
 
 function getUserProfile(){
@@ -659,7 +658,7 @@ function getCostCenter() {
             
             costCenter.forEach((data,index) => {
                 $('table.table tbody').append(`<tr>
-                <th id="noTableCostCenter"scope="row">${index}</th>
+                <th id="noTableCostCenter"scope="row">${index+1}</th>
                 <td id="costCenter">${data.costcenter_name}</td>
                 <td id="description">${data.description}</td>
                 </tr>`)
