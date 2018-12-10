@@ -10,7 +10,7 @@ import jwt
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:adinda@localhost:5432/purchase_order'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:abahaos38@localhost:5432/purchase_order'
 app.config['SECRET_KEY'] = os.urandom(24)
 CORS(app, support_credentials=True)
 db = SQLAlchemy(app)
@@ -481,13 +481,12 @@ def ownerApproved():
         return "Release PO"
         
 
-def submitApproval(username, contractId):
-    print(username, contractId)
-    dbUser = User.query.filter_by(user_name=username).first()
-    role_id = dbUser.position_id
-    data_db = Approval.query.filter_by(contract_id = contractId).first()
-
+def submitApproval(username, contract_id):
+    print(username, contract_id)
+    data_db = Approval.query.filter_by(contract_id = contract_id).first()
     if data_db:
+        dbUser = User.query.filter_by(user_name=username).first()
+        role_id = dbUser.position_id
 
         if role_id == 2:
             data_db.scm_approval = 1
@@ -496,34 +495,11 @@ def submitApproval(username, contractId):
         elif role_id == 4:
             data_db.contract_owner_approval =1
 
-        db.session.commit()
+        db.commit()
         return "approved by ",str(dbUser.user_name)
     else:
         if role_id == 2:
-            toApproval = Approval(
-                contract_id = contractId,
-                scm_approval = 1
-            )
-            db.session.add(toApproval)
-            db.session.commit()
-            return "Approved by SCM", 200
-        elif role_id == 3:
-            toApproval = Approval(
-                contract_id = contractId,
-                manager_approval = 1
-            )
-            db.session.add(toApproval)
-            db.session.commit()
-            return "Approved by Manager", 200
-        elif role_id == 4:
-            toApproval = Approval(
-                contract_id = contractId,
-                contract_owner_approval = 1
-            )
-            db.session.add(toApproval)
-            db.session.commit()
-            return "Approved by Contract Owner"
-
+            toHeader 
 
 
 
@@ -823,18 +799,14 @@ def getcontractbyid():
 
 #getTaskList setiap state di nextflow berdasarkan yg login
 @app.route('/getTaskList')
-
-@app.route('/getTaskListSCM')
-def getListSCM():
+def getList():
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
+    username = decoded['username']
     searchToken = User.query.filter_by(user_name=username).first()
-    userRole = searchToken.position_id
     user_token = searchToken.token
     print(user_token)
 
-    if userRole == 1:
-        query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=Requester&filter[state]=active&filter[definition_id]=%s" % (os.getenv("DEFINITION_ID"))
-    elif userRole == 2:
-        query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=SCM Reviewer&filter[state]=active&filter[definition_id]=%s" % (os.getenv("DEFINITION_ID"))
+    query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=SCM Reviewer&filter[state]=active&filter[definition_id]=%s" % (os.getenv("DEFINITION_ID"))
     url = os.getenv("BASE_URL_TASK")+"?"+quote(query, safe="&=")
 
     r_get = requests.get(url, headers={
@@ -843,7 +815,6 @@ def getListSCM():
     result = json.loads(r_get.text)
     return r_get.text, 200
 
-<<<<<<< HEAD
 @app.route('/getProgressBar')
 def getProgressBar():
     decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
@@ -876,14 +847,11 @@ def getProgressBar():
     return r_get.text, 200
 
 @app.route('/showTaskListSCM', methods=['POST'])
-=======
-@app.route('/showTaskList', methods=['POST'])
->>>>>>> fa0575d2fdb46b24a279bc89828c0b0d87be4899
 def showtask():
     contractList = {"data": []}
     data = request.get_json()
-    for recordId in data:
-        contract = Contract.query.filter_by(record_id=recordId).first()
+    for ww in data:
+        contract = Contract.query.filter_by(record_id=ww).first()
         if contract:
             details = {
             "po_start" : contract.po_start,
@@ -907,6 +875,23 @@ def showtask():
 
 @app.route('/getCostCenter')
 def getCostCenter():
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
+
+    email = decoded["email"]
+    data = User.query.filter_by(email=email).first()
+    dataCost = Costcenter.query.all()
+    
+    if dataCost:
+        costCenterDetail = {
+            "costcenter_name" : fields.String,
+            "description" : fields.String,
+
+        }
+
+        return (json.dumps(marshal(dataCost,costCenterDetail))) 
+
+@app.route('/getOnProgress')
+def getOnProgress():
     decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
 
     email = decoded["email"]

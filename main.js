@@ -843,7 +843,7 @@ function getCountProgress(){
             res = JSON.parse(msg)
             count = res['meta']['total_count']
 
-            progPO = 100-parseInt((count/3)*100);
+            progPO = 100-parseInt((3/3)*100);
             progApproved = parseInt((count/3)*100);
 
             $('#pb-po').css('width',progPO+'%');
