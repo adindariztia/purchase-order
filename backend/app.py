@@ -10,7 +10,7 @@ import jwt
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:adinda@localhost:5432/purchase_order'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Scada123@localhost:5432/purchase_order'
 app.config['SECRET_KEY'] = os.urandom(24)
 CORS(app, support_credentials=True)
 db = SQLAlchemy(app)
@@ -524,6 +524,38 @@ def submitApproval(username, contractId):
             db.session.commit()
             return "Approved by Contract Owner"
 
+@app.route('/getCommentHistory')
+def getCommentHistory():
+    history = []
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
+    email = decoded["email"]
+
+    userDB  = User.query.filter_by(email = email).first()
+    user_token = userDB.token
+    data = request.get_json()
+    contract_number = data['sap_contract_number']
+    contract_doc = Contract.query.filter_by(SAP_contract_number = contract_number).first()
+    recordId = contract_doc.record_id
+    print(recordId)
+    url = os.getenv("BASE_URL_RECORD") + "/" + recordId + "/stageview"
+
+    r_get = requests.get(url, headers={
+        "Content-Type": "Application/json", "Authorization": "Bearer %s" % user_token
+    })
+
+    result = json.loads(r_get.text)
+
+    index = 2
+    while (index <= 8):
+        if result['data'][index]:
+            history.append(result['data'][index])
+        index += 2
+   
+
+    history_json = json.dumps(history)
+
+    return history_json, 200
+
 
 
 
@@ -896,7 +928,6 @@ def getCostCenter():
 @app.route('/getTotalPo')
 def getTotalPo():
     decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
-    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
 
     email = decoded["email"]
     data = User.query.filter_by(email=email).first()
@@ -904,11 +935,10 @@ def getTotalPo():
     
     if dataPo:
         ContractPo = {
-            "SAP_contract_number" : fields.String,
+            "SAP_contract_number" : fields.String
         }
         print(ContractPo)
         return (json.dumps(marshal(dataPo,ContractPo))) 
-
 
 
 if __name__ == '__main__':
