@@ -323,7 +323,7 @@ function showPoSummary() {
             console.log(data)
             var dataContract = data[0],
             dataItem = data[1]
-
+            
             $('#left-information').append(`<p class="font-weight-normal" id="requesterName">${dataContract.requester_name}</p>
             <p class="font-weight-normal" id="poDate">${dataContract.po_start_date}</p>
             
@@ -332,24 +332,24 @@ function showPoSummary() {
             <p class="font-weight-normal" id="bpmPoNumber">${dataContract.bpm_po_number}</p>
             <p class="font-weight-normal" id="currency"> IDR </p>
             <p class="font-weight-normal" id="plant">${dataContract.plant}</p>`)
-
+            
             $('#right-information2').append(`<p class="font-weight-normal" id="payrollNumber">${dataContract.payroll_number}</p>
             <p class="font-weight-normal mb-4" id="processId">${dataContract.process_id}</p>
             <p class="font-weight-normal" id="completionDate">${dataContract.po_completion_date}</p>
             <p class="font-weight-normal" id="sapSrNumber">${dataContract.sap_sr_number}</p>
             <p class="font-weight-normal" id="sapContractNumber">${dataContract.sap_contract_number}</p>
             <p class="font-weight-normal" id="vendorName">${dataContract.vendor_name}</p>`)
-
+            
             $('#companyRepresentative').append(`<input type="text" class="form-control" id="companyRepresentative" placeholder="${dataContract.representative}" disabled>`)
-
+            
             $('#companyToProvide').append(`<input type="text" class="form-control" id="companyToProvide" placeholder="${dataContract.to_provide}" disabled>`)
             
             $('#location').append(`<input type="text" class="form-control" id="location" placeholder="${dataContract.location}" disabled>`)
-
+            
             $('#note').append(`<input type="text" class="form-control" id="note" placeholder="${dataContract.note}" disabled>`)
-
+            
             $('#serviceChargeType').append(`<input type="text" class="form-control" id="serviceChargeType" placeholder="${dataContract.service_charge_type}" disabled>`)
-
+            
             dataItem.forEach((data, index) => {
                 $('table.table tbody').append(`<tr>
                 <th id="noTablePo"scope="row">${index+1}</th>
@@ -358,14 +358,74 @@ function showPoSummary() {
                 <td id="quantity2">${data.quantity}</td>
                 <td id="unitPrice">${data.note}</td> 
                 <td id="subtotal">${data.storage_location}</td>
-            </tr>`)
+                </tr>`)
             })
+            
+            var role = $("#rolePosition").text();
+            console.log(role)
+            if (role === 'SCM'){
+                $('#button-areas').append(`<button type="submit" class="btn btn-primary btn-custom mr-2" onclick="event.preventDefault(); scmapproved('Revise')" id="revision">Revision</button>
+                <button type="submit" class="btn btn-primary btn-custom" onclick="event.preventDefault(); scmapproved('Approved')" id="approved">Approved</button>`)
+            } else if (role === 'Manager') {
+                $('#button-areas').append(`<button type="submit" class="btn btn-primary btn-custom mr-2" onclick="event.preventDefault(); managerapproval('${dataContract.sap_contract_number}')" id="revision">Approve</button>`)
+            } else if (role === 'Contract Owner'){
+                $('#button-areas').append(`<button type="submit" class="btn btn-primary btn-custom mr-2" onclick="event.preventDefault(); coapproval('${dataContract.sap_contract_number}')" id="revision">Approve</button>`)
+
+            }
             
         },
         error: function(err) {
             console.log(err)
         }
     })
+}
+
+function managerapproval(sap_contract_number){
+    var comment = $('#writeComment').val()
+    $.ajax({
+        method: 'POST',
+        url: 'http://localhost:5000/managerApproved',
+        beforeSend: function(req){
+            req.setRequestHeader("Content-Type","application/json")
+            req.setRequestHeader("Authorization", getCookie('token'))
+        },
+        data: JSON.stringify({
+            "sap_contract_number": sap_contract_number,
+            "comment": comment
+        }),
+        success: function(res){
+            alert(res)
+            window.location = '/onProgress.html'
+        },
+        error: function(err){
+            alert(err)
+        }
+    })
+
+}
+
+function coapproval(sap_contract_number){
+    var comment = $('#writeComment').val()
+    $.ajax({
+        method: 'POST',
+        url: 'http://localhost:5000/ownerApproved',
+        beforeSend: function(req){
+            req.setRequestHeader("Content-Type","application/json")
+            req.setRequestHeader("Authorization", getCookie('token'))
+        },
+        data: JSON.stringify({
+            "sap_contract_number": sap_contract_number,
+            "comment": comment
+        }),
+        success: function(res){
+            alert(res)
+            window.location = '/onProgress.html'
+        },
+        error: function(err){
+            alert(err)
+        }
+    })
+
 }
 
 function getcontract() {
@@ -489,19 +549,19 @@ function getTaskListSCM() {
     records = []
     $.ajax({
         method: 'GET',
-        url: 'http://localhost:5000/getTaskListSCM',
+        url: 'http://localhost:5000/getTaskList',
         beforeSend: function(req){
             req.setRequestHeader("Content-Type","application/json")
             req.setRequestHeader("Authorization", getCookie('token'))
         },
         success: function (res) {
-            console.log(typeof res)
-            console.log(res)
+            // console.log(typeof res)
+            // console.log(res)
             response = JSON.parse(res)
             details = response.data
 
             details.forEach(datum => {
-                console.log(datum.record_id)
+                // console.log(datum.record_id)
                 records.push(datum.record_id)
                 
                 
@@ -522,7 +582,7 @@ function getTaskListSCM() {
 function sendRecords(records){
     $.ajax({
         method: 'POST',
-        url: 'http://localhost:5000/showTaskListSCM',
+        url: 'http://localhost:5000/showTaskList',
         beforeSend: function(req){
             req.setRequestHeader("Content-Type","application/json")
             req.setRequestHeader("Authorization", getCookie('token'))
@@ -531,8 +591,8 @@ function sendRecords(records){
             records
         ),
         success: function(res){
-            datuk = JSON.parse(res)
-            data = datuk.data
+            responseData = JSON.parse(res)
+            data = responseData.data
             data.forEach((po, index) => {
                 $('table.table tbody').append(`<tr>
                 <th id="noTableCreate"scope="row">${index + 1}</th>
@@ -546,6 +606,9 @@ function sendRecords(records){
                 </tr>`)
             })
             
+        },
+        error: function(err){
+            alert(err)
         }
     })
     
@@ -593,11 +656,10 @@ function getCostCenter() {
         success: function(res){
             $('#loading').hide();
             costCenter = JSON.parse(res)
-            index = costCenter.length-1
             
-            costCenter.forEach(data => {
+            costCenter.forEach((data,index) => {
                 $('table.table tbody').append(`<tr>
-                <th id="noTableCostCenter"scope="row">${costCenter.length - index}</th>
+                <th id="noTableCostCenter"scope="row">${index}</th>
                 <td id="costCenter">${data.costcenter_name}</td>
                 <td id="description">${data.description}</td>
                 </tr>`)
@@ -610,6 +672,163 @@ function getCostCenter() {
             console.log(err)
         }
     })   
+}
+
+function getTaskList(){
+    records = []
+    var tasklistOwner = '';
+    $.ajax({
+        method: 'GET',
+        url: 'http://localhost:5000/getTaskList',
+        beforeSend: function(req) {
+            req.setRequestHeader("Content-Type","application/json")
+            req.setRequestHeader("Authorization", getCookie('token'))
+        },
+        success: function(res){
+            // alert(res)
+            response = JSON.parse(res)
+            details = response.data
+
+            details.forEach(datum => {
+                tasklistOwner = datum.name
+                
+                records.push(datum.record_id)
+
+                
+            })
+            // console.log(tasklistOwner)
+            // console.log(records)
+            showTaskList(tasklistOwner, records)
+        },
+        error: function(err){
+            alert(err)
+            
+        }
+    })
+}
+
+function showTaskList(tasklistOwner, records){
+    $.ajax({
+        method: 'POST',
+        url:'http://localhost:5000/showTaskList',
+        beforeSend: function(req){
+            req.setRequestHeader("Content-Type", "application/json")
+            req.setRequestHeader("Authorization", getCookie('token'))
+        },
+        data: JSON.stringify(
+            records
+        ),
+        success: function(res) {
+            response = JSON.parse(res)
+            data = response.data
+
+            // alert(res)
+            
+            if (tasklistOwner === 'Manager Approval'){
+                
+                data.forEach((datum, index) => {
+                //    console.log("hey tayo")
+                   $('table.table tbody').append(`<tr>
+                   <th id="noTableOnProgress"scope="row">${index+1}</th>
+                   <td class="" id="sapContractNumber">${datum.SAP_contract_number}</td>
+                   <td class="" id="nameRequester">${datum.po_start}</td>
+                   <td class="" id="vendorName">${datum.vendor_name}</td>
+                   <td class="" id="scmChecklist">
+                       <div class="checklist checklist--approved"></div>
+                   </td>
+                   <td class="" id="managerChecklist">
+                       <div class="not-checklist"></div>
+                   </td>
+                   <td class="" id="contractOwnerChecklist">
+                       <div class="not-checklist"></div>
+                   </td>
+                   <td class="" id="action">
+                       <div class="viewActionButton">
+                           <button type="submit" class="btn btn-primary mb-2 btn-custom" onclick="event.preventDefault();" id="viewActionButton">View</button>
+                       </div>
+                   </td>
+                   </tr>`)
+
+               })
+               
+            } else if (tasklistOwner === 'Requester'){
+                data.forEach((datum, index) => {
+                    $('table.table tbody').append(`<tr>
+                   <th id="noTableOnProgress"scope="row">${index+1}</th>
+                   <td class="" id="sapContractNumber">${datum.SAP_contract_number}</td>
+                   <td class="" id="nameRequester">${datum.po_start}</td>
+                   <td class="" id="vendorName">${datum.vendor_name}</td>
+                   <td class="" id="scmChecklist">
+                       <div class="not-checklist"></div>
+                   </td>
+                   <td class="" id="managerChecklist">
+                       <div class="not-checklist"></div>
+                   </td>
+                   <td class="" id="contractOwnerChecklist">
+                       <div class="not-checklist"></div>
+                   </td>
+                   <td class="" id="action">
+                       <div class="viewActionButton">
+                           <button type="submit" class="btn btn-primary mb-2 btn-custom" onclick="event.preventDefault();" id="viewActionButton">View</button>
+                       </div>
+                   </td>
+                   </tr>`)
+                })
+
+            } else if (tasklistOwner === 'SCM Reviewer'){
+                data.forEach((datum, index) => {
+                    $('table.table tbody').append(`<tr>
+                   <th id="noTableOnProgress"scope="row">${index+1}</th>
+                   <td class="" id="sapContractNumber">${datum.SAP_contract_number}</td>
+                   <td class="" id="nameRequester">${datum.po_start}</td>
+                   <td class="" id="vendorName">${datum.vendor_name}</td>
+                   <td class="" id="scmChecklist">
+                       <div class="not-checklist"></div>
+                   </td>
+                   <td class="" id="managerChecklist">
+                       <div class="not-checklist"></div>
+                   </td>
+                   <td class="" id="contractOwnerChecklist">
+                       <div class="not-checklist"></div>
+                   </td>
+                   <td class="" id="action">
+                       <div class="viewActionButton">
+                           <button type="submit" class="btn btn-primary mb-2 btn-custom" onclick="event.preventDefault();" id="viewActionButton">View</button>
+                       </div>
+                   </td>
+                   </tr>`)
+                })
+
+            } else if (tasklistOwner === 'Contract Owner Approval'){
+                data.forEach((datum, index) => {
+                    $('table.table tbody').append(`<tr>
+                   <th id="noTableOnProgress"scope="row">${index+1}</th>
+                   <td class="" id="sapContractNumber">${datum.SAP_contract_number}</td>
+                   <td class="" id="nameRequester">${datum.po_start}</td>
+                   <td class="" id="vendorName">${datum.vendor_name}</td>
+                   <td class="" id="scmChecklist">
+                       <div class="checklist checklist--approved"></div>
+                   </td>
+                   <td class="" id="managerChecklist">
+                       <div class="checklist checklist--approved"></div>
+                   </td>
+                   <td class="" id="contractOwnerChecklist">
+                       <div class="not-checklist"></div>
+                   </td>
+                   <td class="" id="action">
+                       <div class="viewActionButton">
+                           <button type="submit" class="btn btn-primary mb-2 btn-custom" onclick="event.preventDefault();" id="viewActionButton">View</button>
+                       </div>
+                   </td>
+                   </tr>`)
+                })
+
+            }
+        },
+        error: function(err){
+            alert(err)
+        }
+    })
 }
 
 function getCountProgress(){
