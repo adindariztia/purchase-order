@@ -537,7 +537,8 @@ def getCommentHistory():
     contract_doc = Contract.query.filter_by(SAP_contract_number = contract_number).first()
     recordId = contract_doc.record_id
     print(recordId)
-    url = os.getenv("BASE_URL_RECORD") + "/" + recordId + "/stageview"
+    print(os.getenv("BASE_URL_RECORD"))
+    url = (os.getenv("BASE_URL_RECORD")) + "/" + recordId + "/stageview"
 
     r_get = requests.get(url, headers={
         "Content-Type": "Application/json", "Authorization": "Bearer %s" % user_token
@@ -548,7 +549,11 @@ def getCommentHistory():
     index = 2
     while (index <= 8):
         if result['data'][index]:
-            history.append(result['data'][index])
+            comment = []
+            comment.append(result['data'][index]['actor']['display_name'])
+            comment.append(result['data'][index]['target']['content'])
+            history.append(comment)
+
         index += 2
    
 
