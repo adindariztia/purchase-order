@@ -823,9 +823,9 @@ def getcontractbyid():
 
 #getTaskList setiap state di nextflow berdasarkan yg login
 @app.route('/getTaskList')
-def getList():
-    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
-    username = decoded['username']
+
+@app.route('/getTaskListSCM')
+def getListSCM():
     searchToken = User.query.filter_by(user_name=username).first()
     userRole = searchToken.position_id
     user_token = searchToken.token
@@ -835,11 +835,6 @@ def getList():
         query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=Requester&filter[state]=active&filter[definition_id]=%s" % (os.getenv("DEFINITION_ID"))
     elif userRole == 2:
         query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=SCM Reviewer&filter[state]=active&filter[definition_id]=%s" % (os.getenv("DEFINITION_ID"))
-    elif userRole == 3:
-        query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=Manager Approval&filter[state]=active&filter[definition_id]=%s" % (os.getenv("DEFINITION_ID"))
-    elif userRole ==4:
-        query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=Contract Owner Approval&filter[state]=active&filter[definition_id]=%s" % (os.getenv("DEFINITION_ID"))
-    
     url = os.getenv("BASE_URL_TASK")+"?"+quote(query, safe="&=")
 
     r_get = requests.get(url, headers={
