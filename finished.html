@@ -12,11 +12,6 @@
     <link rel="stylesheet" type="text/css" media="screen" href="./css/main.css" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-    <script src="main.js"></script>
-    
 </head>
 <body>
 
@@ -29,7 +24,7 @@
         </form>
     </nav>
 
-    <!---------- sidebar ------------>
+    <!-- sidebar -->
     <div class="sidenav">
 
         
@@ -78,7 +73,7 @@
 
     </div>
     
-    <!---------------- header Finished PO ------------------->
+    <!-- header Finished PO -->
     <div class="box-create-po">
 
         <div class="po-summary">
@@ -87,14 +82,14 @@
             </nav>
         </div>
 
-        <!------------------ table Finished PO  ---------------->
+        <!-- table Finished PO  -->
         <div class="box-table-po">
             <table class="table table-bordered text-center bg-white table-striped">
                 <thead>
                     <tr>
                     <th scope="col">No</th>
                     <th scope="col">SAP Contract Number</th>
-                    <th scope="col">Requester</th>
+                    <!-- <th scope="col">Requester</th> -->
                     <th scope="col">Vendor Name</th>
                     <th scope="col">SCM</th>
                     <th scope="col">Manager</th>
@@ -106,7 +101,7 @@
                     <tr>
                         <th id="noTableOnProgress"scope="row">1</th>
                         <td class="" id="sapContractNumber">000000000</td>
-                        <td class="" id="nameRequester">Riki Permana</td>
+                        <!-- <td class="" id="nameRequester">Riki Permana</td> -->
                         <td class="" id="vendorName">Makers Institute</td>
                         <td class="" id="scmChecklist">
                             <div class="checklist checklist--approved"></div>
@@ -123,7 +118,7 @@
                             </div>
                         </td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                         <th id=""scope="row">2</th>
                         <td id=""></td>
                         <td id=""></td>
@@ -132,8 +127,8 @@
                         <td id=""></td>
                         <td id=""></td>
                         <td id=""></td>
-                        </tr>
-                        <tr>
+                        </tr> -->
+                        <!-- <tr>
                         <th id=""scope="row">3</th>
                         <td id=""></td>
                         <td id=""></td>
@@ -142,17 +137,30 @@
                         <td id=""></td>
                         <td id=""></td>
                         <td id=""></td>
-                    </tr>
+                    </tr> -->
                 </tbody>
             </table>
         </div>
     </div>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="main.js"></script>
+
+    <script>
+    checkSession()
+    getUserProfile()
+    </script>
 </body>
+<<<<<<< HEAD
+=======
 <!-- <script src="main.js"></script> -->
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
 <script>
 checkSession()
 getUserProfile()
+finishedPo()
 </script>
+>>>>>>> 5c12a465fe15177f3c3a23d45c2aecfbd824f834
 </html>

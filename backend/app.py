@@ -10,7 +10,7 @@ import jwt
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Scada123@localhost:5432/purchase_order'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:abahaos38@localhost:5432/purchase_order'
 app.config['SECRET_KEY'] = os.urandom(24)
 CORS(app, support_credentials=True)
 db = SQLAlchemy(app)
@@ -225,17 +225,19 @@ def submitDataPoToDatabase():
 
     # insert data to table item
     arrayData = request_data['array_item']
+    index = 1
     for data in arrayData:
         item = Items(
             item_name = data['itemDetail'],
             type = data['type'],
             description = data['description2'],
             storage_location = data['storageLocation2'],
-            quantity = data['quantity2'],
-            price = data['price2'],
+            quantity = data['tbl_quantity'+str(index)],
+            price = data['tbl_price'+str(index)],
             note = data['note2'],
             contract_id = dataContract.id
         )
+        index += 1
         db.session.add(item)
         db.session.commit()
 
@@ -421,7 +423,7 @@ def managerApproved():
                     print(result)
                     return r_get.text
 
-        recursive()
+        recursive() 
         submitApproval(req_username,contract_doc.id)
         return "flow sudah sampai CO"
 
@@ -481,13 +483,12 @@ def ownerApproved():
         return "Release PO"
         
 
-def submitApproval(username, contractId):
-    print(username, contractId)
-    dbUser = User.query.filter_by(user_name=username).first()
-    role_id = dbUser.position_id
-    data_db = Approval.query.filter_by(contract_id = contractId).first()
-
+def submitApproval(username, contract_id):
+    print(username, contract_id)
+    data_db = Approval.query.filter_by(contract_id = contract_id).first()
     if data_db:
+        dbUser = User.query.filter_by(user_name=username).first()
+        role_id = dbUser.position_id
 
         if role_id == 2:
             data_db.scm_approval = 1
@@ -496,10 +497,11 @@ def submitApproval(username, contractId):
         elif role_id == 4:
             data_db.contract_owner_approval =1
 
-        db.session.commit()
+        db.commit()
         return "approved by ",str(dbUser.user_name)
     else:
         if role_id == 2:
+            toHeader 
             toApproval = Approval(
                 contract_id = contractId,
                 scm_approval = 1
@@ -711,22 +713,21 @@ def getSummary():
 @app.route('/completedPOList')
 def completed_po():
     decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
-    email = decoded["email"]
+    # email = decoded["email"]
     approvalDB = Approval.query.all()
     completed_po = []
 
     for approval in approvalDB:
-        if (approval.scm_approval + approval.manager_approval + approval.contract_owner_approval == 3):
-            userDB = User.query.filter_by(id = approval.user_id, email = email).first()
+        if ((approval.scm_approval == 1) and (approval.manager_approval == 1) and (approval.contract_owner_approval == 1)):
+            # userDB = User.query.filter_by(id = approval.user_id, email = email).first()
             contractDB = Contract.query.filter_by(id = approval.contract_id).first()
 
             format_json = {
-                "scm approval" : approval.scm_approval,
-                "manager approval" : approval.manager_approval,
-                "contract owner approval" : approval.contract_owner_approval,
-                "requester name" : userDB.user_name,
-                "sap conntract number" : contractDB.SAP_contract_number,
-                "vendor name" : contractDB.vendor_name
+                "scm_approval" : approval.scm_approval,
+                "manager_approval" : approval.manager_approval,
+                "contract_owner_approval" : approval.contract_owner_approval,
+                "sap_contract_number" : contractDB.SAP_contract_number,
+                "vendor_name" : contractDB.vendor_name
             }
 
             completed_po.append(format_json)
@@ -864,19 +865,41 @@ def getList():
     decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
     username = decoded['username']
     searchToken = User.query.filter_by(user_name=username).first()
-    userRole = searchToken.position_id
     user_token = searchToken.token
     print(user_token)
 
-    if userRole == 1:
-        query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=Requester&filter[state]=active&filter[definition_id]=%s" % (os.getenv("DEFINITION_ID"))
-    elif userRole == 2:
-        query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=SCM Reviewer&filter[state]=active&filter[definition_id]=%s" % (os.getenv("DEFINITION_ID"))
-    elif userRole == 3:
-        query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=Manager Approval&filter[state]=active&filter[definition_id]=%s" % (os.getenv("DEFINITION_ID"))
-    elif userRole ==4:
-        query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=Contract Owner Approval&filter[state]=active&filter[definition_id]=%s" % (os.getenv("DEFINITION_ID"))
+    query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=SCM Reviewer&filter[state]=active&filter[definition_id]=%s" % (os.getenv("DEFINITION_ID"))
+    url = os.getenv("BASE_URL_TASK")+"?"+quote(query, safe="&=")
+
+    r_get = requests.get(url, headers={
+        "Content-Type": "Application/json", "Authorization": "Bearer %s" % user_token
+    })
+    result = json.loads(r_get.text)
+    return r_get.text, 200
+
+@app.route('/getProgressBar')
+def getProgressBar():
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
+    username = decoded['username']
+    # print(username)
+    searchToken = User.query.filter_by(user_name=username).first()
+    user_token = searchToken.token
+
+    userRole = Roles.query.filter_by(id = searchToken.position_id).first()
+    # print(userRole.role)
+
     
+    if (userRole.role == "Requester"):
+        position="Requester"
+    elif (userRole.role == "SCM"):
+        position="SCM Reviewer"
+    elif (userRole.role == "Manager"):
+        position="Manager Approval"
+    elif (userRole.role == "Contract Owner"):
+        position="Contract Owner Approval"
+        # print(position)
+
+    query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=%s&filter[state]=active&filter[definition_id]=%s" % (position,os.getenv("DEFINITION_ID"))
     url = os.getenv("BASE_URL_TASK")+"?"+quote(query, safe="&=")
 
     r_get = requests.get(url, headers={
@@ -889,8 +912,8 @@ def getList():
 def showtask():
     contractList = {"data": []}
     data = request.get_json()
-    for recordId in data:
-        contract = Contract.query.filter_by(record_id=recordId).first()
+    for ww in data:
+        contract = Contract.query.filter_by(record_id=ww).first()
         if contract:
             details = {
             "po_start" : contract.po_start,
@@ -930,6 +953,8 @@ def getCostCenter():
         return (json.dumps(marshal(dataCost,costCenterDetail))) 
 
 
+<<<<<<< HEAD
+=======
 @app.route('/getTotalPo')
 def getTotalPo():
     decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
@@ -943,8 +968,10 @@ def getTotalPo():
             "SAP_contract_number" : fields.String
         }
         print(ContractPo)
-        return (json.dumps(marshal(dataPo,ContractPo))) 
+        return (json.dumps(marshal(dataPo,ContractPo)))
 
 
+
+>>>>>>> 5c12a465fe15177f3c3a23d45c2aecfbd824f834
 if __name__ == '__main__':
     app.run(debug=True, host=os.getenv("HOST"), port=os.getenv("PORT"))
