@@ -244,8 +244,8 @@ function addItemToTabel() {
     <td id="type">${item_type}</td>
     <td id="description2">${description}</td>
     <td id="storageLocation2">${storageLocation}</td>
-    <td id="quantity2">${quantity}</td>
-    <td id="price2">${price}</td>
+    <td id="quantity2${row.length + 1}">${quantity}</td>
+    <td id="price2${row.length + 1}">${price}</td>
     <td id="note2">${note}</td>
     <td id="action">
         <button onclick="deleterow(${row.length + 1})" type="submit" class="btn btn-danger btn-custom" id="actionDelete">
@@ -261,10 +261,10 @@ function addItemToTabel() {
     total_price = 0
     rows = $('table.table tbody tr').get()
         rows.forEach(row => {
-        var tds = $(row).find('#quantity2').html(),
+        var tds = $(row).find('#quantity2'+(row.length + 1)).html(),
         sum = Number(tds)
         // console.log(sum)
-        var tds2 = $(row).find('#price2').html(),
+        var tds2 = $(row).find('#price2'+(row.length + 1)).html(),
         price = Number(tds2)
         
         total_price += sum * price
@@ -276,7 +276,14 @@ function addItemToTabel() {
     })
 }
 
-function deleterow(id) {
+function deleterow(a,b,id) {
+    var quantity = Number($('#quantity2'+a).val());
+    console.log(typeof quantity)
+    var price = Number($('#price2'+b).val());
+    console.log(typeof price)
+    var subtotal = quantity * price
+    var total_price = $('#totalAmount').val() - subtotal
+    console.log(total_price)
     $('#deleteThisRow'+id).remove();
 }
 
