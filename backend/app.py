@@ -225,17 +225,19 @@ def submitDataPoToDatabase():
 
     # insert data to table item
     arrayData = request_data['array_item']
+    index = 1
     for data in arrayData:
         item = Items(
             item_name = data['itemDetail'],
             type = data['type'],
             description = data['description2'],
             storage_location = data['storageLocation2'],
-            quantity = data['quantity2'],
-            price = data['price2'],
+            quantity = data['tbl_quantity'+str(index)],
+            price = data['tbl_price'+str(index)],
             note = data['note2'],
             contract_id = dataContract.id
         )
+        index += 1
         db.session.add(item)
         db.session.commit()
 
@@ -421,7 +423,7 @@ def managerApproved():
                     print(result)
                     return r_get.text
 
-        recursive()
+        recursive() 
         submitApproval(req_username,contract_doc.id)
         return "flow sudah sampai CO"
 
@@ -500,6 +502,62 @@ def submitApproval(username, contract_id):
     else:
         if role_id == 2:
             toHeader 
+            toApproval = Approval(
+                contract_id = contractId,
+                scm_approval = 1
+            )
+            db.session.add(toApproval)
+            db.session.commit()
+            return "Approved by SCM", 200
+        elif role_id == 3:
+            toApproval = Approval(
+                contract_id = contractId,
+                manager_approval = 1
+            )
+            db.session.add(toApproval)
+            db.session.commit()
+            return "Approved by Manager", 200
+        elif role_id == 4:
+            toApproval = Approval(
+                contract_id = contractId,
+                contract_owner_approval = 1
+            )
+            db.session.add(toApproval)
+            db.session.commit()
+            return "Approved by Contract Owner"
+
+@app.route('/getCommentHistory')
+def getCommentHistory():
+    history = []
+    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
+    email = decoded["email"]
+
+    userDB  = User.query.filter_by(email = email).first()
+    user_token = userDB.token
+    data = request.get_json()
+    contract_number = data['sap_contract_number']
+    contract_doc = Contract.query.filter_by(SAP_contract_number = contract_number).first()
+    recordId = contract_doc.record_id
+    print(recordId)
+    url = os.getenv("BASE_URL_RECORD") + "/" + recordId + "/stageview"
+
+    r_get = requests.get(url, headers={
+        "Content-Type": "Application/json", "Authorization": "Bearer %s" % user_token
+    })
+
+    result = json.loads(r_get.text)
+
+    index = 2
+    while (index <= 8):
+        if result['data'][index]:
+            history.append(result['data'][index])
+        index += 2
+   
+
+    history_json = json.dumps(history)
+
+    return history_json, 200
+
 
 
 
@@ -846,7 +904,7 @@ def getProgressBar():
     result = json.loads(r_get.text)
     return r_get.text, 200
 
-@app.route('/showTaskListSCM', methods=['POST'])
+@app.route('/showTaskList', methods=['POST'])
 def showtask():
     contractList = {"data": []}
     data = request.get_json()
@@ -875,23 +933,6 @@ def showtask():
 
 @app.route('/getCostCenter')
 def getCostCenter():
-    decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
-
-    email = decoded["email"]
-    data = User.query.filter_by(email=email).first()
-    dataCost = Costcenter.query.all()
-    
-    if dataCost:
-        costCenterDetail = {
-            "costcenter_name" : fields.String,
-            "description" : fields.String,
-
-        }
-
-        return (json.dumps(marshal(dataCost,costCenterDetail))) 
-
-@app.route('/getOnProgress')
-def getOnProgress():
     decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
 
     email = decoded["email"]
