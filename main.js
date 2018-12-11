@@ -921,3 +921,96 @@ function finishedPo(){
 function tosap(sap_contract_number){
     window.location = "/viewpo.html?SAP_contract_number="+ sap_contract_number       
 }
+
+function showSapSummary() {
+    var number = window.location.search
+    contractnumber = number.substr(length-12)
+    console.log(contractnumber)
+    $.ajax({
+        method: 'POST',
+        url: 'http://localhost:5000/getsummary',
+        beforeSend: function(req) {
+            req.setRequestHeader("Content-Type", "application/json")
+            req.setRequestHeader("Authorization", getCookie('token'))
+        },
+        data: JSON.stringify({
+            "sap_contract_number" : contractnumber
+        }),
+        success: function(res) {
+            data = JSON.parse(res)
+            console.log(data)
+            var dataContract = data[0],
+            dataItem = data[1]
+            
+            $('#left-information').append(`<p class="font-weight-normal" id="requesterName">${dataContract.requester_name}</p>
+            <p class="font-weight-normal" id="poDate">${dataContract.po_start_date}</p>
+            
+            <p class="font-weight-normal" id="bpmSrNumber">${dataContract.bpm_sr_number}</p>
+            <p class="font-weight-normal" id="bpmContractNumber">${dataContract.bpm_contract_number}</p>
+            <p class="font-weight-normal" id="bpmPoNumber">${dataContract.bpm_po_number}</p>
+            <p class="font-weight-normal" id="currency"> IDR </p>
+            <p class="font-weight-normal" id="plant">${dataContract.plant}</p>`)
+            
+            $('#right-information2').append(`<p class="font-weight-normal" id="payrollNumber">${dataContract.payroll_number}</p>
+            <p class="font-weight-normal mb-4" id="processId">${dataContract.process_id}</p>
+            <p class="font-weight-normal" id="completionDate">${dataContract.po_completion_date}</p>
+            <p class="font-weight-normal" id="sapSrNumber">${dataContract.sap_sr_number}</p>
+            <p class="font-weight-normal" id="sapContractNumber">${dataContract.sap_contract_number}</p>
+            <p class="font-weight-normal" id="vendorName">${dataContract.vendor_name}</p>`)
+            
+            $('#companyRepresentative').append(`<input type="text" class="form-control" id="companyRepresentative" placeholder="${dataContract.representative}" disabled>`)
+            
+            $('#companyToProvide').append(`<input type="text" class="form-control" id="companyToProvide" placeholder="${dataContract.to_provide}" disabled>`)
+            
+            $('#location').append(`<input type="text" class="form-control" id="location" placeholder="${dataContract.location}" disabled>`)
+            
+            $('#note').append(`<input type="text" class="form-control" id="note" placeholder="${dataContract.note}" disabled>`)
+            
+            $('#serviceChargeType').append(`<input type="text" class="form-control" id="serviceChargeType" placeholder="${dataContract.service_charge_type}" disabled>`)
+            
+            dataItem.forEach((data, index) => {
+                $('table.table tbody').append(`<tr>
+                <th id="noTablePo"scope="row">${index+1}</th>
+                <td id="itemDetail">${data.item_name}</td>
+                <td id="budgetSource2">${data.description}</td>
+                <td id="quantity2">${data.quantity}</td>
+                <td id="unitPrice">${data.note}</td> 
+                <td id="subtotal">${data.storage_location}</td>
+                </tr>`)
+            })
+            
+            
+        },
+        error: function(err) {
+            console.log(err)
+        }
+    })
+}
+
+function getCommentHistory(){
+    var number = window.location.search
+    contractnumber = number.substr(length-12)
+    $.ajax({
+        method: 'POST',
+        url: 'http://localhost:5000/getCommentHistory',
+        beforeSend: function(req){
+            req.setRequestHeader("Content-Type","application/json")
+            req.setRequestHeader("Authorization", getCookie('token'))
+        },
+        data: JSON.stringify({
+            "sap_contract_number": contractnumber
+        }),
+        success: function(res){
+            $('table.table tbody').append(`<div class="box-comment">
+            <div class="box-isi-comment">
+                <p class="font-weight-normal m-0 custom-name" id="userName">Riki Permana</p>
+                <p class="font-weight-normal m-0 custom-comment" id="Comment">Saya sudah membuat SAP</p>
+                <p class="font-weight-normal m-0 custom-date" id="dateComment">03-Apr-2019</p>
+            </div>
+        </div>`)
+        },
+        error: function(err){
+            alert(err)
+        }
+    })
+}

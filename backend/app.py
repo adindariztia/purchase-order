@@ -10,7 +10,7 @@ import jwt
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:abahaos38@localhost:5432/purchase_order'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:adinda@localhost:5432/purchase_order'
 app.config['SECRET_KEY'] = os.urandom(24)
 CORS(app, support_credentials=True)
 db = SQLAlchemy(app)
@@ -526,7 +526,7 @@ def submitApproval(username, contract_id):
             db.session.commit()
             return "Approved by Contract Owner"
 
-@app.route('/getCommentHistory')
+@app.route('/getCommentHistory', methods=['POST'])
 def getCommentHistory():
     history = []
     decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
