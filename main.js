@@ -388,7 +388,8 @@ function showPoSummary() {
                 $('#button-areas').append(`<button type="submit" class="btn btn-primary btn-custom mr-2" onclick="event.preventDefault(); managerapproval('${dataContract.sap_contract_number}')" id="revision">Approve</button>`)
             } else if (role === 'Contract Owner') {
                 $('#button-areas').append(`<button type="submit" class="btn btn-primary btn-custom mr-2" onclick="event.preventDefault(); coapproval('${dataContract.sap_contract_number}')" id="revision">Approve</button>`)
-
+            } else if (role === 'Requester') {
+                $('#button-areas').append(`<button type="submit" class="btn btn-primary btn-custom mr-2" onclick="event.preventDefault(); requestersubmit('${dataContract.sap_contract_number}')" id="revision">Approve</button>`)
             }
 
         },
@@ -762,7 +763,7 @@ function showTaskList(tasklistOwner, records) {
                    </td>
                    <td class="" id="action">
                        <div class="viewActionButton">
-                           <button type="submit" class="btn btn-primary mb-2 btn-custom" onclick="event.preventDefault();" id="viewActionButton">View</button>
+                           <button type="submit" class="btn btn-primary mb-2 btn-custom" onclick="event.preventDefault(); tocontractScm('${datum.SAP_contract_number}')" id="viewActionButton">View</button>
                        </div>
                    </td>
                    </tr>`)
@@ -787,7 +788,7 @@ function showTaskList(tasklistOwner, records) {
                    </td>
                    <td class="" id="action">
                        <div class="viewActionButton">
-                           <button type="submit" class="btn btn-primary mb-2 btn-custom" onclick="event.preventDefault();" id="viewActionButton">View</button>
+                           <button type="submit" class="btn btn-primary mb-2 btn-custom" onclick="event.preventDefault(); tocontractScm('${datum.SAP_contract_number}')" id="viewActionButton">View</button>
                        </div>
                    </td>
                    </tr>`)
@@ -811,7 +812,7 @@ function showTaskList(tasklistOwner, records) {
                    </td>
                    <td class="" id="action">
                        <div class="viewActionButton">
-                           <button type="submit" class="btn btn-primary mb-2 btn-custom" onclick="event.preventDefault();" id="viewActionButton">View</button>
+                           <button type="submit" class="btn btn-primary mb-2 btn-custom" onclick="event.preventDefault(); tocontractScm('${datum.SAP_contract_number}')" id="viewActionButton">View</button>
                        </div>
                    </td>
                    </tr>`)
@@ -835,7 +836,7 @@ function showTaskList(tasklistOwner, records) {
                    </td>
                    <td class="" id="action">
                        <div class="viewActionButton">
-                           <button type="submit" class="btn btn-primary mb-2 btn-custom" onclick="event.preventDefault();" id="viewActionButton">View</button>
+                           <button type="submit" class="btn btn-primary mb-2 btn-custom" onclick="event.preventDefault(); tocontractScm('${datum.SAP_contract_number}')" id="viewActionButton">View</button>
                        </div>
                    </td>
                    </tr>`)
@@ -876,4 +877,47 @@ function getCountProgress() {
         }
 
     })
+}
+
+function finishedPo(){
+    $.ajax({
+        url: 'http://localhost:5000/completedPOList',
+        beforeSend: function (req){
+            req.setRequestHeader("Content-Type", "application")
+            req.setRequestHeader("Authorization", getCookie('token'))
+        },
+        success: function(res){
+            response = JSON.parse(res)
+            response.forEach((data, index) =>{
+                $('table.table tbody').append(`<tr>
+                <th id="noTableOnProgress"scope="row">${index+1}</th>
+                <td class="" id="sapContractNumber">${data.sap_contract_number}</td>
+                
+                <td class="" id="vendorName">${data.vendor_name}</td>
+                <td class="" id="scmChecklist">
+                    <div class="checklist checklist--approved"></div>
+                </td>
+                <td class="" id="managerChecklist">
+                    <div class="checklist checklist--approved"></div>
+                </td>
+                <td class="" id="contractOwnerChecklist">
+                    <div class="checklist"></div>
+                </td>
+                <td class="" id="action">
+                    <div class="viewActionButton">
+                        <button type="submit" class="btn btn-primary mb-2 btn-custom" onclick="event.preventDefault(); tosap('${data.sap_contract_number}')" id="viewActionButton">View</button>
+                    </div>
+                </td>
+                </tr>`)
+            })
+        },
+        error: function(err){
+            alert(err)
+        }
+        
+    })
+}
+
+function tosap(sap_contract_number){
+    window.location = "/viewpo.html?SAP_contract_number="+ sap_contract_number       
 }
