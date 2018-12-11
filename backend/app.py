@@ -539,7 +539,8 @@ def getCommentHistory():
     contract_doc = Contract.query.filter_by(SAP_contract_number = contract_number).first()
     recordId = contract_doc.record_id
     print(recordId)
-    url = os.getenv("BASE_URL_RECORD") + "/" + recordId + "/stageview"
+    print(os.getenv("BASE_URL_RECORD"))
+    url = (os.getenv("BASE_URL_RECORD")) + "/" + recordId + "/stageview"
 
     r_get = requests.get(url, headers={
         "Content-Type": "Application/json", "Authorization": "Bearer %s" % user_token
@@ -548,14 +549,18 @@ def getCommentHistory():
     result = json.loads(r_get.text)
 
     index = 2
-    while (index <= 8):
-        if result['data'][index]:
-            history.append(result['data'][index])
-        index += 2
-   
+    commentHistory = {'data': []}
+    for data in result['data']:
+        if data["name"] == "Task completed":
+            comment = {
+                "username" : result['data'][index]['actor']['display_name'],
+                "comment" : result['data'][index]['target']['content'],
+                "published" : result['data'][index]['published']
+            }
+            commentHistory['data'].append(comment)
+            index += 2
 
-    history_json = json.dumps(history)
-
+    history_json = json.dumps(commentHistory)
     return history_json, 200
 
 
@@ -948,8 +953,6 @@ def getCostCenter():
         return (json.dumps(marshal(dataCost,costCenterDetail))) 
 
 
-<<<<<<< HEAD
-=======
 @app.route('/getTotalPo')
 def getTotalPo():
     decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
@@ -967,6 +970,5 @@ def getTotalPo():
 
 
 
->>>>>>> 5c12a465fe15177f3c3a23d45c2aecfbd824f834
 if __name__ == '__main__':
     app.run(debug=True, host=os.getenv("HOST"), port=os.getenv("PORT"))
