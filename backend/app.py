@@ -1,4 +1,4 @@
-from flask import Flask, request, json, session, make_response
+from flask import Flask, request, json, session, make_response, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
 from flask_restful import marshal, fields
@@ -877,32 +877,39 @@ def getList():
 def getProgressBar():
     decoded = jwt.decode(request.headers["Authorization"], jwtSecretKey, algorithm=['HS256'])
     username = decoded['username']
-    # print(username)
-    searchToken = User.query.filter_by(user_name=username).first()
-    user_token = searchToken.token
 
-    userRole = Roles.query.filter_by(id = searchToken.position_id).first()
-    # print(userRole.role)
+    countRequester = tasklist('Requester', getTokenUser('riki_requester_po@makersinstitute.com'))
+    countSCM = tasklist('SCM Reviewer', getTokenUser('cecep_scm_po@makersinstitute.com'))
+    countManager = tasklist('Manager Approval',  getTokenUser('adinda_manager_po@makersinstitute.com'))
+    countContractOwner = tasklist('Contract Owner Approval',  getTokenUser('naufal_co_po@makersinstitute.com'))
 
-    
-    if (userRole.role == "Requester"):
-        position="Requester"
-    elif (userRole.role == "SCM"):
-        position="SCM Reviewer"
-    elif (userRole.role == "Manager"):
-        position="Manager Approval"
-    elif (userRole.role == "Contract Owner"):
-        position="Contract Owner Approval"
-        # print(position)
+    count_json = {
+        "count_requester": countRequester,
+        "count_scm": countSCM,
+        "count_manager": countManager,
+        "count_contract_owner": countContractOwner
 
-    query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=%s&filter[state]=active&filter[definition_id]=%s" % (position,os.getenv("DEFINITION_ID"))
+    }
+
+    return jsonify(count_json)
+
+def getTokenUser(email_user):
+    userDB = User.query.filter_by(email=email_user).first()
+    token = userDB.token
+    return token
+
+
+def tasklist(posisi,user_token):
+    query = "folder=app:task:all&page[number]=1&page[size]=10&filter[name]=%s&filter[state]=active&filter[definition_id]=%s" % (posisi,os.getenv("DEFINITION_ID"))
     url = os.getenv("BASE_URL_TASK")+"?"+quote(query, safe="&=")
 
     r_get = requests.get(url, headers={
-        "Content-Type": "Application/json", "Authorization": "Bearer %s" % user_token
+        "Content-Type": "Application/json", "Authorization": "Bearer "+ user_token
     })
+
     result = json.loads(r_get.text)
-    return r_get.text, 200
+    count = result['meta']['total_count']
+    return str(count)
 
 @app.route('/showTaskList', methods=['POST'])
 def showtask():
