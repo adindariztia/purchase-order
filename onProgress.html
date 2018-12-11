@@ -12,11 +12,6 @@
     <link rel="stylesheet" type="text/css" media="screen" href="./css/main.css" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-	<script src="main.js"></script>
-
 </head>
 <body>
 
@@ -29,7 +24,7 @@
         </form>
     </nav>
 
-    <!---------- sidebar ------------>
+    <!-- sidebar -->
     <div class="sidenav">
 
         
@@ -78,7 +73,7 @@
 
     </div>
     
-    <!---------------- header On Progress PO ------------------->
+    <!-- header On Progress PO -->
     <div class="box-create-po">
 
         <div class="po-summary">
@@ -87,7 +82,7 @@
             </nav>
         </div>
 
-        <!------------------ table on Progress PO  ---------------->
+        <!-- table on Progress PO  -->
         <div class="box-table-po">
             <table class="table table-bordered text-center bg-white table-striped">
                 <thead>
@@ -148,12 +143,15 @@
         </div>
     </div>
 
+    <script src="main.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+    <script>
+    checkSession()
+    getUserProfile()
+    </script>
+
 </body>
-<!-- <script src="main.js"></script> -->
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-<script>
-checkSession()
-getUserProfile()
-getTaskList()
-</script>
 </html>

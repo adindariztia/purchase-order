@@ -11,13 +11,7 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="screen" href="./css/main.css" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-	<script src="main.js"></script>
-    
+  
 </head>
 <body>
 
@@ -35,11 +29,9 @@
 
     </div>
 
-    <!---------- sidebar ------------>
-
+    <!-- sidebar -->
     <div class="sidenav">
 
-        
         <div class="sidebar-text-box my-5" id="profileBox">
             <!-- <h6 class="sidebar-text" id="namaStaff">Nama Staff Purchasing</h6>
             <h6 class="sidebar-text" id="rolePosition">Role Position</h6>
@@ -85,9 +77,9 @@
 
     </div>
     
-    <!---------------------- Isi PO Summary  ----------------------->
+    <!-- PO Summary fill -->
 
-    <!--------------------------- Navbar PO Summary ----------------->
+    <!-- Navbar PO Summary -->
     <div class="box-po-summary">
         <div class="po-summary">
             <nav class="navbar bg-primary text-white">
@@ -170,19 +162,19 @@
                         <div class="form-group row">
                             <label for="colFormLabelSm" class="col-sm-4 col-form-label">Medco Representative</label>
                             <div class="col-sm-8" id="addPoItem">
-                            <input type="email" class="form-control" id="companyRepresentative" placeholder="">
+                            <input type="text" class="form-control" id="companyRepresentative" placeholder="">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="colFormLabel" class="col-sm-4 col-form-label">Medco To Provide</label>
                             <div class="col-sm-8" id="addPoItem">
-                            <input type="email" class="form-control" id="companyToProvide" placeholder="">
+                            <input type="text" class="form-control" id="companyToProvide" placeholder="">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="colFormLabelLg" class="col-sm-4 col-form-label">Location</label>
                             <div class="col-sm-8" id="addPoItem">
-                            <input type="email" class="form-control " id="location" placeholder="">
+                            <input type="text" class="form-control " id="location" placeholder="">
                             </div>
                         </div>
                         <div class="form-group row" id="addPoItem2">
@@ -194,7 +186,7 @@
                         <!-- <div class="form-group row">
                             <label for="colFormLabelLg" class="col-sm-4 col-form-label">Budget Source</label>
                             <div class="col-sm-8">
-                            <input type="email" class="form-control " id="budgetSource" placeholder="">
+                            <input type="text" class="form-control " id="budgetSource" placeholder="">
                             </div>
                         </div> -->
                         <div class="form-group row">
@@ -214,7 +206,7 @@
         </div>
     </div>
 
-    <!--------------------------- Navbar Item PO ----------------->
+    <!-- Navbar Item PO -->
     <div class="box-po-summary">
         <div class="po-summary">
             <nav class="navbar bg-primary text-white">
@@ -228,7 +220,7 @@
                         <div class="form-group row">
                             <label for="colFormLabelLg" class="col-sm-4 col-form-label">Name</label>
                             <div class="col-sm-8">
-                            <input type="email" class="form-control " id="itemname">
+                            <input type="text" class="form-control " id="itemname">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -269,7 +261,7 @@
                         <div class="form-group row">
                             <label for="colFormLabelLg" class="col-sm-4 col-form-label">Price</label>
                             <div class="col-sm-7">
-                            <input type="email" class="form-control " id="price" placeholder="0">
+                            <input type="text" class="form-control " id="price" placeholder="0">
                             </div>
                             <label for="colFormLabelLg" class="col-sm-1 col-form-label">IDR</label>
                         </div>
@@ -292,14 +284,14 @@
                         </div>
                     </form>
 
-                    <!-------- Button Add PO Item ---------->
+                    <!-- Button Add PO Item -->
                     <div class="box-btn-search text-center">
                         <div>
                             <button type="submit" class="btn btn-primary btn-custom" onclick="addItemToTabel()">Add PO Item</button>
                         </div>
                     </div>
 
-                    <!------------------ table Add PO Item  ---------------->
+                    <!-- table Add PO Item  -->
                     <div class="box-table-po table-striped">
                         <table class="table table-bordered text-center bg-white">
                             <thead>
@@ -355,7 +347,7 @@
                         </table>
                     </div>
 
-                    <!-------- Total Amount---------->
+                    <!-- Total Amount -->
                     <div class="form-group row px-4" >
                         <label for="colFormLabelLg" class="col-sm-0 col-form-label">Total Amount (IDR)</label>
                         <div class="col-sm-2">
@@ -367,7 +359,7 @@
         </div>
     </div>
 
-    <!--------------------------- Navbar Comment ----------------->
+    <!-- Navbar Comment -->
     <!-- <div class="box-po-summary">
         <div class="po-summary">
             <nav class="navbar bg-primary text-white">
@@ -420,18 +412,23 @@
         <!-- </div> -->
     </div>
 
-    <!-------- Button Submit Po to DB ---------->
+    <!-- Button Submit Po to DB -->
     <div class="box-btn-search text-right mb-3 mx-3">
         <div>
             <button type="submit" class="btn btn-primary btn-custom mr-2" id="submitPo" onclick="getAllDataItem()">Submit PO</button>
         </div>
     </div>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="main.js"></script>
+
+    <script>
+    checkSession()
+    getUserProfile()
+    getContractByNumber()
+    </script>
 </body>
 
-<script>
-checkSession()
-getUserProfile()
-getContractByNumber()
-</script>
 </html>
