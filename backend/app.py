@@ -547,18 +547,18 @@ def getCommentHistory():
     result = json.loads(r_get.text)
 
     index = 2
-    while (index <= 8):
-        if result['data'][index]:
-            comment = []
-            comment.append(result['data'][index]['actor']['display_name'])
-            comment.append(result['data'][index]['target']['content'])
-            history.append(comment)
+    commentHistory = {'data': []}
+    for data in result['data']:
+        if data["name"] == "Task completed":
+            comment = {
+                "username" : result['data'][index]['actor']['display_name'],
+                "comment" : result['data'][index]['target']['content'],
+                "published" : result['data'][index]['published']
+            }
+            commentHistory['data'].append(comment)
+            index += 2
 
-        index += 2
-   
-
-    history_json = json.dumps(history)
-
+    history_json = json.dumps(commentHistory)
     return history_json, 200
 
 
